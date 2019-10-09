@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { SafeAreaView, View, Text, StyleSheet, Dimensions } from 'react-native';
 import { Item, Input, Button, Icon } from 'native-base'
 
-export default class Login extends Component {
+export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
