@@ -52,6 +52,9 @@ export default class ForYou extends React.Component {
   componentWillUnmount(){
     clearInterval(this.state.slideInterval);
   }
+  handleDetail(){
+    this.props.navigation.navigate('Detail')
+  }
 
   
   render() {
@@ -76,11 +79,12 @@ export default class ForYou extends React.Component {
 
           <View style={styles.formFav}>
             <Text style={styles.title}>Favorite</Text>
-              <List dataArray={this.state.favList} horizontal={true}
+              <List dataArray={this.state.banners} horizontal={true}
               renderRow={(item) =>
               <ListItem thumbnail>
                 <Body>
-                <Thumbnail square source={{uri: item.url}}/> 
+                <Thumbnail square source={{uri: item.url}}
+                onHandleButton= {() => this.handleDetail()}/> 
                   <Text>{item.title}</Text>
                 </Body>
               </ListItem>}>
@@ -95,12 +99,13 @@ export default class ForYou extends React.Component {
               renderRow={(item) =>
               <ListItem thumbnail>
                 <Left>
-                <Thumbnail square source={{uri: item.url}}/> 
+                <Thumbnail square source={{uri: item.url}}
+                onHandleButton= {() => this.handleDetail()}/> 
                 <Body>
-                <Text>{item.title}</Text>
+                <Text >{item.title}</Text>
                 <Item>
                 <Button block small primary
-                 onPress={() => alert('add Favorite')}>
+                 onHandleButton= {() => this.handleDetail()}>
                   <Text style={{color:'#ffffff'}}> + Favorite </Text>
                   </Button>
                   </Item>

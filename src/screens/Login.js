@@ -1,13 +1,15 @@
 import React from 'react';
 import { SafeAreaView, View, Text, StyleSheet, Dimensions } from 'react-native';
-import { Item, Input, Button, Icon } from 'native-base'
+import { Item, Input, Button, Icon } from 'native-base';
+import { StackActions, NavigationActions } from 'react-navigation'
+
 
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email : '',
-      password : '',
+      email : 'rizky@gg.com',
+      password : 'asdas',
       icon: 'eye-off',
       passMode : true
     };
@@ -25,6 +27,7 @@ export default class Login extends React.Component {
     else {
       this.setState({email:text})
       alert("Email is Correct");
+      this.handleLogin()
     }
     }
 
@@ -33,6 +36,11 @@ export default class Login extends React.Component {
       icon: prevState.icon === 'eye' ? 'eye-off' : 'eye',
       passMode: !prevState.passMode
     }));
+  }
+
+  
+  handleLogin() {
+    this.props.navigation.navigate('BottomTabNav')
   }
 
   render() {
@@ -62,7 +70,7 @@ export default class Login extends React.Component {
               keyboardType='default' />
               <Icon name = {this.state.icon} onPress={() => this.modeIcon()} />
           </Item>
-          <Button block rounded onPress={() => this.validate(this.state.email)}>
+          <Button block rounded onPress={() => this.validate(this.state.email) }>
              <Text style={{color:'#ffffff'}}>Log In</Text></Button>
             </View>
           </View>
