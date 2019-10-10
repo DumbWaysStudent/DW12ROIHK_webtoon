@@ -58,7 +58,7 @@ export default class DetailEpisode extends Component {
             </Button>
           </Left>
           <Body>
-            <Title style={styles.title}>{this.state.cover.title}</Title>
+            <Title style={styles.title}>{this.state.cover.ep}</Title>
           </Body>
           <Right>
             <Button transparent>
