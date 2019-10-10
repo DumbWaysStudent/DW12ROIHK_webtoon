@@ -1,7 +1,6 @@
 import React from 'react';
 import {createAppContainer} from 'react-navigation';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
-import {createStackNavigator} from 'react-navigation-stack';
 import {Icon } from 'native-base'
 
 import ForYou from './../screens/ForYou'
