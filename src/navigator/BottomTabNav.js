@@ -5,7 +5,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 import {Icon } from 'native-base'
 
 import ForYou from './../screens/ForYou'
-import Favorite from './../screens/Favorite'
+import Favorite from './../screens/MyFavorite'
 import Profile from './../screens/Profile'
 
 
