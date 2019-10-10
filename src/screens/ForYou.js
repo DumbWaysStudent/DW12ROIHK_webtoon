@@ -83,8 +83,9 @@ export default class ForYou extends React.Component {
               renderRow={(item) =>
               <ListItem thumbnail>
                 <Body>
-                <Thumbnail square source={{uri: item.url}}
-                onHandleButton= {() => this.handleDetail()}/> 
+                <Button transparent onPress= {() => this.handleDetail()}>
+                <Thumbnail square source={{uri: item.url}}/> 
+                  </Button>
                   <Text>{item.title}</Text>
                 </Body>
               </ListItem>}>
@@ -99,8 +100,9 @@ export default class ForYou extends React.Component {
               renderRow={(item) =>
               <ListItem thumbnail>
                 <Left>
-                <Thumbnail square source={{uri: item.url}}
-                onHandleButton= {() => this.handleDetail()}/> 
+                  <Button onPress= {() => this.handleDetail()}>
+                <Thumbnail square source={{uri: item.url}}/>
+                 </Button>
                 <Body>
                 <Text >{item.title}</Text>
                 <Item>

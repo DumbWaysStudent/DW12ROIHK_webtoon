@@ -52,7 +52,14 @@ export default class Detail extends Component {
       ]
     })
   }
-
+  
+  handleDetailEp() {
+    this.props.navigation.navigate('DetailEpisode')
+  }
+  
+  handleBottomTabNav() {
+    this.props.navigation.navigate('BottomTabNav')
+  }
   render() {
     return (
       <Container style={styles.Container}>
@@ -60,7 +67,7 @@ export default class Detail extends Component {
           <Left>
             <Button  transparent>
               <Icon name='arrow-back'
-               onPress={()=> alert('back')} />
+               onPress={()=> this.handleBottomTabNav()} />
             </Button>
           </Left>
           <Body>
@@ -82,7 +89,8 @@ export default class Detail extends Component {
           data={this.state.data}
           renderItem={({item}) => 
           <ListItem thumbnail>
-          <Thumbnail square source={{uri: item.url}}/>
+            <Button transparent onPress = {()=> this.handleDetailEp()}>
+          <Thumbnail square source={{uri: item.url}}/></Button>
             <Body>
               <Text>Ep {item.ep}</Text>
               <Text note numberOfLines={1}>{item.date}</Text>

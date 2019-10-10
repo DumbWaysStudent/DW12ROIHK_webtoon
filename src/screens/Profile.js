@@ -16,20 +16,6 @@ export default class Profile extends Component {
           },
   }
 }
-  onClick() {
-    Share.share({
-      message: 'BAM: we\'re helping your business with awesome React Native apps',
-      url: 'http://bam.tech',
-      title: 'Wow, did you see that?'
-    }, {
-      // Android only:
-      dialogTitle: 'Share BAM goodness',
-      // iOS only:
-      excludedActivityTypes: [
-        'com.apple.UIKit.activity.PostToTwitter'
-      ]
-    })
-  }
 
   render() {
     return (
@@ -55,8 +41,7 @@ export default class Profile extends Component {
         <Content style={styles.container}>
         <View style= {styles.ProfileForm}>
           <Thumbnail style={styles.ProfileImage}
-            source={{uri: this.state.account.image}}/>
-         
+            source={{uri: this.state.account.image}}/>         
          <Text style={styles.title}>{this.state.account.name}</Text>
         </View>
 
@@ -71,7 +56,7 @@ export default class Profile extends Component {
               </Right>
             </ListItem>
             <ListItem selected>
-            <Left>
+              <Left>
                 <Text style={styles.allText}>Log Out</Text>
               </Left>
             </ListItem>
@@ -92,10 +77,10 @@ const styles = StyleSheet.create({
     padding: 5
   },
   title: {
-    fontSize: 30,
+    fontSize: 20,
   },
   allText: {
-    fontSize: 20,
+    fontSize: 15,
   },
   ProfileImage:{
     width: 150, 

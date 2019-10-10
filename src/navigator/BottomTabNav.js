@@ -5,7 +5,8 @@ import {Icon } from 'native-base'
 
 import ForYou from './../screens/ForYou'
 import Favorite from './../screens/MyFavorite'
-import Profile from './../screens/Profile'
+//import Profile from './../screens/Profile'
+import Profile from './RootProfile'
 
 
 const BottomTabNav = createBottomTabNavigator(

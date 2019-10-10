@@ -46,7 +46,9 @@ export default class DetailEpisode extends Component {
       ]
     })
   }
-
+  handleDetail() {
+    this.props.navigation.navigate('Detail')
+  }
   render() {
     return (
       <Container style={styles.Container}>
@@ -54,7 +56,7 @@ export default class DetailEpisode extends Component {
           <Left>
             <Button  transparent>
               <Icon name='arrow-back'
-               onPress={()=> alert('back')} />
+               onPress={()=> this.handleDetail()} />
             </Button>
           </Left>
           <Body>

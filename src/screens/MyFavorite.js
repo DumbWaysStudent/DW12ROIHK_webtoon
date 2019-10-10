@@ -41,7 +41,9 @@ export default class MyFavorite extends React.Component {
     };
   }
 
-
+  handleDetail() {
+    this.props.navigation.navigate('Detail')
+  }
   
   render() {
     return (
@@ -62,7 +64,7 @@ export default class MyFavorite extends React.Component {
               <List dataArray={this.state.banners}
               renderRow={(item) =>
               <ListItem thumbnail>
-                  <Button onPress = {() => alert(item.title)}>
+                  <Button onPress = {() => this.handleDetail()}>
                 <Thumbnail square source={{uri: item.url}}/> 
                 </Button>
                 <Body>

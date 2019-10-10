@@ -7,10 +7,11 @@ import DetailEpisode from './src/screens/DetailEpisode'
 import MyFavorite from './src/screens/MyFavorite'
 import RootNavigator from './src/navigator/RootNavigator'
 import BottomTabNav from './src/navigator/BottomTabNav'
+import RootProfile from './src/navigator/RootProfile'
 
 
 export default class App extends Component {
   render() {
-    return <BottomTabNav/>
+    return <RootNavigator/>
   }
 }
