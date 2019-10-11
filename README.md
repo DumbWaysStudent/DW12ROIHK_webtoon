@@ -1,11 +1,11 @@
 # DW12ROIHK_webtoon
-##Important
+## Important
 
 This project is still on very early development stage. If you want to use for production, use it with your own risk. 
 More feature Coming Really Soon.
 
-##Clone App Webtoon
-This app is a Clone from LINE WEBTOON App. LINE WEBTOON – Free Comics! New ways to enjoy your comic with your smartphone. 
+## Positive toon
+Positive toon app is a Clone from LINE WEBTOON App. LINE WEBTOON – Free Comics! New ways to enjoy your comic with your smartphone. 
 
 ## Screenshots
 
