@@ -45,7 +45,7 @@ export default class CreateEpisode extends React.Component {
         <Header>
         <Left>
             <Button  transparent
-            onPress={()=> this.handleCreateWebtoon()} >
+            onPress={()=> this.props.navigation.goBack(null)} >
               <Icon name='arrow-back'
                />
             </Button>

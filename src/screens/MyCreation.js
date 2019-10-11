@@ -44,6 +44,9 @@ export default class MyCreation extends Component {
   handleCreateWebtoon(){
     this.props.navigation.navigate('CreateWebtoon')
   }
+  handleEditWebtoon(){
+    this.props.navigation.navigate('EditWebtoon')
+  }
   handleProfile(){
     this.props.navigation.navigate('Profile')
   }
@@ -54,7 +57,7 @@ export default class MyCreation extends Component {
         <Left>
             <Button  transparent>
               <Icon name='arrow-back'
-               onPress={()=> this.handleProfile()} />
+               onPress={()=> this.props.navigation.goBack(null)} />
             </Button>
           </Left>
           <Body>
@@ -67,7 +70,7 @@ export default class MyCreation extends Component {
       renderRow={(item) =>
       <ListItem thumbnail style={styles.formItem}>
         <Left>
-          <Button onPress= {() => this.handleCreateWebtoon()}>
+          <Button onPress= {() => this.handleEditWebtoon()}>
         <Thumbnail square source={{uri: item.url}}/>
          </Button>
         <Body>
@@ -81,7 +84,7 @@ export default class MyCreation extends Component {
             style={{ backgroundColor: '#5067FF' }}
             position="bottomRight"
             onPress={() => this.handleCreateWebtoon()}>
-            <Icon name="share" />
+            <Icon name="add" />
           </Fab>
       </View>
       </Container>

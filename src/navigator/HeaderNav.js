@@ -8,6 +8,7 @@ import ContainProfile from '../components/ContainProfile';
 import MyCreation from './../screens/MyCreation';
 import CreateWebtoon from './../screens/CreateWebtoon';
 import CreateEpisode from './../screens/CreateEpisode';
+import EditWebtoon from './../screens/EditWebtoon';
 
 // without Bottom Tab Navigator
 const HeaderNav = createStackNavigator({
@@ -41,8 +42,14 @@ const HeaderNav = createStackNavigator({
         header:null
       }),
     }, 
-    CreateEpisode:{
+    CreateEpisode: {
       screen: CreateEpisode,
+      navigationOptions: ({ navigation }) => ({
+        header:null
+      }),
+    }, 
+    EditWebtoon: {
+      screen: EditWebtoon,
       navigationOptions: ({ navigation }) => ({
         header:null
       }),

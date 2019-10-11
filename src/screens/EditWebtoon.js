@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions, SafeAreaView, FlatList } from 'reac
 import { Container, Content, Body, Item, Button, Input, Icon, List, Thumbnail, ListItem, Header,
 Left, Title, Right } from 'native-base'
 
-export default class CreateWebtoon extends React.Component {
+export default class EditWebtoon extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,13 +45,13 @@ export default class CreateWebtoon extends React.Component {
         <Header>
         <Left>
             <Button  transparent
-            onPress={()=> this.props.navigation.goBack(null)} >
+            onPress={()=> this.handleMyCreation()} >
               <Icon name='arrow-back'
                />
             </Button>
           </Left>
           <Body>
-            <Title style={styles.title}>My Webtoon Creation</Title>
+            <Title style={styles.title}>Edit Webtoon</Title>
             </Body>
             <Right>
             <Button  transparent 
@@ -66,7 +66,7 @@ export default class CreateWebtoon extends React.Component {
               
             <Text style={styles.title}>Title</Text>
           <Item rounded>
-            <Input
+            <Input 
               value={this.state.search}
               onChangeText={(text) => this.setState({ search: text })}
                 />
@@ -92,10 +92,15 @@ export default class CreateWebtoon extends React.Component {
           
         </SafeAreaView>
         </View>
-          <Button block rounded onPress = {()=> this.handleCreateEpisode()}>
+          <Button block square style={{marginVertical:5}}
+          onPress = {()=> this.handleCreateEpisode()}>
             <Text style={{color:'#ffffff'}} >+ Add Episode</Text>
           </Button>
-              
+          <Button block square danger 
+           style={{marginVertical:5}}
+           onPress = {()=> alert('Delete Episode')}>
+            <Text style={{color:'#ffffff'}} >Delete Webtoon</Text>
+          </Button>
         </Content>
         </Container>
     );
