@@ -5,7 +5,7 @@ This project is still on very early development stage. If you want to use for pr
 More feature Coming Really Soon.
 
 ## Positive toon
-Positive toon app is a Clone from LINE WEBTOON App. LINE WEBTOON – Free Comics! New ways to enjoy your comic with your smartphone. 
+Positive toon app is a Clone from LINE WEBTOON App. Free Comics! New ways to enjoy your comic with your smartphone. 
 
 ## Screenshots
 
