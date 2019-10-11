@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
 import { Container, Header, Left, Body, Right, 
-    Button, Icon, Input, Title, Content, Card, Thumbnail, Textarea } from 'native-base';
+    Button, Icon, Input, Title, Content, Card, Thumbnail, Textarea, List, ListItem } from 'native-base';
 
 
 //import Profile from './../screens/Profile'
@@ -28,14 +28,40 @@ export default class RootProfile extends Component {
       isEdit: !prevState.isEdit
     }));
   }  
+  handleLogout(){
+    this.props.navigation.navigate('Login')
+  }
+  handleMyCreation(){
+    this.props.navigation.navigate('MyCreation')
+  }
   
   render() {
       let mode;
     if(this.state.isEdit){
         mode = <EditProfile />
     } else{
-        mode = <ContainProfile accountName= {this.state.account.name} 
-        accountImage= {this.state.account.image}/>
+        mode = (
+          <Content style={styles.container}>
+          <ContainProfile/>
+        <SafeAreaView style={styles.form}>
+        <List>
+          <ListItem selected onPress={()=> this.handleMyCreation()}>
+            <Left>
+              <Text style={styles.allText}>My Webtoon Creation</Text>
+            </Left>
+            <Right>
+              <Icon name="arrow-forward" />
+            </Right>
+          </ListItem>
+          <ListItem selected onPress={()=> this.handleLogout()}>
+            <Left>
+              <Text style={styles.allText}>Log Out</Text>
+            </Left>
+          </ListItem>
+          </List>
+      </SafeAreaView>
+      </Content>
+    )
     }
     return (
     <Container>

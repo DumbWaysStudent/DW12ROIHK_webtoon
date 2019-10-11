@@ -3,9 +3,10 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import Login from './../screens/Login'
 import Detail from './../screens/Detail'
-import DetailEpisode from '../screens/DetailEpisode';
+import DetailEpisode from './../screens/DetailEpisode';
 import ContainProfile from '../components/ContainProfile';
-import RootProfile from '../navigator/RootProfile';
+import MyCreation from './../screens/MyCreation';
+import CreateWebtoon from './../screens/CreateWebtoon';
 
 // without Bottom Tab Navigator
 const HeaderNav = createStackNavigator({
@@ -27,12 +28,18 @@ const HeaderNav = createStackNavigator({
         header:null
       }),
     },
-    ContainProfile: {
-      screen: ContainProfile,
+    MyCreation: {
+      screen: MyCreation,
       navigationOptions: ({ navigation }) => ({
         header:null
       }),
     },
+    CreateWebtoon:{
+      screen: CreateWebtoon,
+      navigationOptions: ({ navigation }) => ({
+        header:null
+      }),
+    }, 
   });
 
 export default createAppContainer(HeaderNav);
