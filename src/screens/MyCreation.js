@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
-import { Container, Header, Left, Body, Right, 
-    Button, Icon, Input, Title, Content, Card, Thumbnail, Textarea, List, ListItem, Item, Fab } from 'native-base';
+import { View, Text, StyleSheet, Dimensions} from 'react-native';
+import { Container, Header, Left, Body, 
+    Button, Icon, Title, Thumbnail, List, ListItem, Fab } from 'native-base';
 
 export default class MyCreation extends Component {
   constructor(props) {
@@ -57,7 +57,7 @@ export default class MyCreation extends Component {
         <Left>
             <Button  transparent>
               <Icon name='arrow-back'
-               onPress={()=> this.props.navigation.goBack(null)} />
+               onPress={()=> this.handleProfile()} />
             </Button>
           </Left>
           <Body>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions, SafeAreaView, FlatList } from 'react-native';
-import { Container, Content, Body, Item, Button, Input, Icon, List, Thumbnail, ListItem, Header,
+import { Container, Content, Body, Item, Button, Input, Icon, Thumbnail, ListItem, Header,
 Left, Title, Right } from 'native-base'
 
 export default class CreateEpisode extends React.Component {
@@ -33,7 +33,7 @@ export default class CreateEpisode extends React.Component {
   }
 
   handleCreateWebtoon() {
-    this.props.navigation.navigate('CreateWebtoon')
+    this.props.navigation.goBack(null)
   }
   handleCreateEpisode() {
     this.props.navigation.navigate('CreateEpisode')
@@ -59,8 +59,8 @@ export default class CreateEpisode extends React.Component {
               <Icon name='checkmark'/>
               </Button>
             </Right>
-
           </Header>
+          
           <Content  style={styles.container}>
           <View style={styles.formTitle}>
               
@@ -79,7 +79,7 @@ export default class CreateEpisode extends React.Component {
           data={this.state.data}
           renderItem={({item}) => 
           <ListItem thumbnail>
-            <Button transparent onPress = {()=> alert('a')}>
+            <Button transparent >
           <Thumbnail square source={{uri: item.url}}/></Button>
             <Body>
               <Text>{item.id}. {item.fileName}</Text>

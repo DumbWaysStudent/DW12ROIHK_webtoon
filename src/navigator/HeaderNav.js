@@ -4,11 +4,11 @@ import { createStackNavigator } from 'react-navigation-stack';
 import Login from './../screens/Login'
 import Detail from './../screens/Detail'
 import DetailEpisode from './../screens/DetailEpisode';
-import ContainProfile from '../components/ContainProfile';
 import MyCreation from './../screens/MyCreation';
 import CreateWebtoon from './../screens/CreateWebtoon';
 import CreateEpisode from './../screens/CreateEpisode';
 import EditWebtoon from './../screens/EditWebtoon';
+import EditEpisode from './../screens/EditEpisode';
 
 // without Bottom Tab Navigator
 const HeaderNav = createStackNavigator({
@@ -50,6 +50,12 @@ const HeaderNav = createStackNavigator({
     }, 
     EditWebtoon: {
       screen: EditWebtoon,
+      navigationOptions: ({ navigation }) => ({
+        header:null
+      }),
+    }, 
+    EditEpisode: {
+      screen: EditEpisode,
       navigationOptions: ({ navigation }) => ({
         header:null
       }),

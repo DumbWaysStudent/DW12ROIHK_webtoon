@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions, SafeAreaView, FlatList } from 'react-native';
-import { Container, Content, Body, Item, Button, Input, Icon, List, Thumbnail, ListItem, Header,
+import { Container, Content, Body, Item, Button, Input, Icon, Thumbnail, ListItem, Header,
 Left, Title, Right } from 'native-base'
 
 export default class EditWebtoon extends React.Component {
@@ -37,6 +37,9 @@ export default class EditWebtoon extends React.Component {
   }
   handleCreateEpisode() {
     this.props.navigation.navigate('CreateEpisode')
+  }
+  handleEditEpisode() {
+    this.props.navigation.navigate('EditEpisode')
   }
   
   render() {
@@ -79,7 +82,7 @@ export default class EditWebtoon extends React.Component {
           data={this.state.data}
           renderItem={({item}) => 
           <ListItem thumbnail>
-            <Button transparent onPress = {()=> alert('a')}>
+            <Button transparent onPress = {()=> this.handleEditEpisode()}>
           <Thumbnail square source={{uri: item.url}}/></Button>
             <Body>
               <Text>Ep {item.ep}</Text>
@@ -98,7 +101,7 @@ export default class EditWebtoon extends React.Component {
           </Button>
           <Button block square danger 
            style={{marginVertical:5}}
-           onPress = {()=> alert('Delete Episode')}>
+           onPress = {()=> alert('Delete Webtoon')}>
             <Text style={{color:'#ffffff'}} >Delete Webtoon</Text>
           </Button>
         </Content>

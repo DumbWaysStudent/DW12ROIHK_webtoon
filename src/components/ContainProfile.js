@@ -13,8 +13,8 @@ export default class ContainProfile extends Component {
     return (      
       <View style= {styles.ProfileForm}>
         <Thumbnail style={styles.ProfileImage}
-          source={{uri: account.image}}/>         
-       <Text style={styles.title}>{account.name}</Text>
+          source={{uri: this.props.accountImage}}/>         
+       <Text style={styles.Text}>{this.props.accountName}</Text>
       </View>
     );
   }
@@ -30,8 +30,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
   },
-  allText: {
-    fontSize: 15,
+  Text: {
+    marginTop: 15,
+    fontSize: 20,
   },
   ProfileImage:{
     width: 150, 

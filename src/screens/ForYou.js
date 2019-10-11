@@ -107,7 +107,7 @@ export default class ForYou extends React.Component {
                 <Text >{item.title}</Text>
                 <Item>
                 <Button block small primary
-                 onHandleButton= {() => this.handleDetail()}>
+                 onPress= {() => alert('add favorite')}>
                   <Text style={{color:'#ffffff'}}> + Favorite </Text>
                   </Button>
                   </Item>

@@ -1,8 +1,6 @@
-import { StyleSheet, Dimensions, Text, Share, Image, View,  } from 'react-native';
+import { StyleSheet, Dimensions, View,  } from 'react-native';
 import React, { Component } from 'react';
-import { Container, Header, Left, Body, Right, Button, Icon, Input, 
-  Title, Content, Card, Thumbnail, Textarea, Item } from 'native-base';
-import {account} from './../data/dummy'
+import { Button, Thumbnail} from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 
 export default class EditProfile extends Component {
@@ -48,7 +46,6 @@ export default class EditProfile extends Component {
 
   render() {
     return (
-        <Content style={styles.container}>
         <View style= {styles.ProfileForm}>
           
         <Button transparent bordered rounded style={styles.ProfileImage}
@@ -57,14 +54,6 @@ export default class EditProfile extends Component {
           <Thumbnail style={styles.ProfileImage}
             source={{uri: this.state.filePath.uri }}/></Button>
         </View>
-        <View style= {styles.ProfileForm}>
-            <Card style= {styles.textInput}>
-          <Input bordered style= {styles.textInput}
-              value={this.state.name}
-              onChangeText={(text) => this.setState({ name: text })}
-              />
-         </Card></View>
-        </Content>
     );
   }
 }

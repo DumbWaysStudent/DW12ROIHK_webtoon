@@ -4,9 +4,6 @@ import { Container, Header, Left, Body, Right, Button, Icon, Title, Content} fro
 
 export default class DetailEpisode extends Component {
 
-    // handleBack() {
-    //     this.props.navigation.navigate('BottomTabNav')
-    //   }
     constructor(props) {
         super(props);
         this.state = {

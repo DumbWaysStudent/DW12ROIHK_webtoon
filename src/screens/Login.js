@@ -1,15 +1,14 @@
 import React from 'react';
 import { SafeAreaView, View, Text, StyleSheet, Dimensions } from 'react-native';
 import { Item, Input, Button, Icon } from 'native-base';
-import { StackActions, NavigationActions } from 'react-navigation'
 
 
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email : 'rizky@gg.com',
-      password : 'asdas',
+      email : '',
+      password : '',
       icon: 'eye-off',
       passMode : true
     };
@@ -17,7 +16,7 @@ export default class Login extends React.Component {
 
   validate = (text) => {
     //console.log(text);
-    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/ ;
     if(reg.test(text) === false)
     {
       alert("Email is Not Correct");
@@ -41,6 +40,11 @@ export default class Login extends React.Component {
   
   handleLogin() {
     this.props.navigation.navigate('BottomTabNav')
+  }
+
+  demo(){
+    this.setState({ password: 'asd' })
+    this.setState({ email: 'this@mode.demo' })
   }
 
   render() {
@@ -72,6 +76,8 @@ export default class Login extends React.Component {
           </Item>
           <Button block rounded onPress={() => this.validate(this.state.email) }>
              <Text style={{color:'#ffffff'}}>Log In</Text></Button>
+          <Text style={styles.TextMode}
+          onPress={()=> this.demo()}>Demo Mode</Text>
             </View>
           </View>
       </SafeAreaView>
@@ -102,5 +108,10 @@ const styles = StyleSheet.create({
     },
     formItem:{
       marginBottom : 10
+    },
+    TextMode:{
+      marginTop: 20,
+      color: 'blue',
+      alignSelf: 'center',
     }
 })

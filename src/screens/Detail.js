@@ -1,13 +1,11 @@
-import { StyleSheet, Dimensions, Text, Share, Image, View, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, Dimensions, Text, Share, Image, FlatList, SafeAreaView } from 'react-native';
 import React, { Component } from 'react';
-import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, List, ListItem, Thumbnail } from 'native-base';
-import { StackActions, NavigationActions } from 'react-navigation'
+import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, ListItem, Thumbnail } from 'native-base';
+
 
 export default class Detail extends Component {
 
-    // handleBack() {
-    //     this.props.navigation.navigate('BottomTabNav')
-    //   }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -57,7 +55,7 @@ export default class Detail extends Component {
     this.props.navigation.navigate('DetailEpisode')
   }
   
-  handleBottomTabNav() {
+  handleBack() {
     this.props.navigation.navigate('BottomTabNav')
   }
   render() {
@@ -67,7 +65,7 @@ export default class Detail extends Component {
           <Left>
             <Button  transparent>
               <Icon name='arrow-back'
-               onPress={()=> this.handleBottomTabNav()} />
+               onPress={()=> this.handleBack()} />
             </Button>
           </Left>
           <Body>
