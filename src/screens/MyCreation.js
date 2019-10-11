@@ -67,7 +67,7 @@ export default class MyCreation extends Component {
       renderRow={(item) =>
       <ListItem thumbnail style={styles.formItem}>
         <Left>
-          <Button onPress= {() => this.handleDetail()}>
+          <Button onPress= {() => this.handleCreateWebtoon()}>
         <Thumbnail square source={{uri: item.url}}/>
          </Button>
         <Body>

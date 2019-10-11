@@ -52,7 +52,7 @@ export default class Login extends React.Component {
             <Text style={styles.title}>LOG IN</Text>
             <Text style={styles.subTitle}>Log in with your WEBTOON accoun</Text>
           </View>
-          <View style={styles.form}>
+          <View>
             <Text>Email</Text>
           <Item style={styles.formItem}>
             <Input
