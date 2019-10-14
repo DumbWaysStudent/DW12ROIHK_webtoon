@@ -61,7 +61,7 @@ export default class Detail extends Component {
   render() {
     return (
       <Container style={styles.Container}>
-        <Header>
+        <Header style={styles.Header}>
           <Left>
             <Button  transparent>
               <Icon name='arrow-back'
@@ -122,5 +122,8 @@ const styles = StyleSheet.create({
   },
   Slideshow:{
     width: 250,
-  }
+  },
+  Header:{
+    backgroundColor: '#ff6e6e',
+  },
 })

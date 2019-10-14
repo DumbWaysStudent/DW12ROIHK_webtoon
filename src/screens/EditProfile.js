@@ -1,14 +1,14 @@
-import { StyleSheet, Dimensions, View,  } from 'react-native';
+import { StyleSheet, Dimensions, View, } from 'react-native';
 import React, { Component } from 'react';
-import { Button, Thumbnail} from 'native-base';
+import { Button, Thumbnail } from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 
 export default class EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filePath: {uri:'https://s.kaskus.id/images/2017/02/27/2153697_20170227015800.jpg'},
-        name: 'Your name',
+      filePath: { uri: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015800.jpg' },
+      name: 'Your name',
 
     };
   }
@@ -25,7 +25,7 @@ export default class EditProfile extends Component {
     };
     ImagePicker.showImagePicker(options, response => {
       console.log('Response = ', response);
- 
+
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -46,14 +46,14 @@ export default class EditProfile extends Component {
 
   render() {
     return (
-        <View style= {styles.ProfileForm}>
-          
+      <View style={styles.ProfileForm}>
+
         <Button transparent bordered rounded style={styles.ProfileImage}
-        title='Choose File'
-         onPress={this.chooseFile.bind(this)} >
+          title='Choose File'
+          onPress={this.chooseFile.bind(this)} >
           <Thumbnail style={styles.ProfileImage}
-            source={{uri: this.state.filePath.uri }}/></Button>
-        </View>
+            source={{ uri: this.state.filePath.uri }} /></Button>
+      </View>
     );
   }
 }
@@ -68,17 +68,17 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
   },
-  ProfileImage:{
-    width: 150, 
+  ProfileImage: {
+    width: 150,
     height: 150,
-    borderRadius: 150/2,
-  },  
+    borderRadius: 150 / 2,
+  },
   ProfileForm: {
     marginTop: 50,
     alignItems: 'center'
   },
-  textInput:{
-    width:200,
-    height:50,
+  textInput: {
+    width: 200,
+    height: 50,
   }
 })

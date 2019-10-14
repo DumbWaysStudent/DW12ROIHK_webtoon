@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Dimensions} from 'react-native';
 import { Container, Header, Left, Body, 
-    Button, Icon, Title, Thumbnail, List, ListItem, Fab } from 'native-base';
+    Button, Icon, Title, Thumbnail, List, ListItem, Fab, Card } from 'native-base';
 
 export default class MyCreation extends Component {
   constructor(props) {
@@ -44,8 +44,8 @@ export default class MyCreation extends Component {
   handleCreateWebtoon(){
     this.props.navigation.navigate('CreateWebtoon')
   }
-  handleEditWebtoon(){
-    this.props.navigation.navigate('EditWebtoon')
+  handleEditWebtoon(item){
+    this.props.navigation.navigate('EditWebtoon', {webtoon: item})
   }
   handleProfile(){
     this.props.navigation.navigate('Profile')
@@ -53,7 +53,7 @@ export default class MyCreation extends Component {
   render() {
     return (
       <Container>
-        <Header>
+        <Header style={styles.Header}>
         <Left>
             <Button  transparent>
               <Icon name='arrow-back'
@@ -70,7 +70,7 @@ export default class MyCreation extends Component {
       renderRow={(item) =>
       <ListItem thumbnail style={styles.formItem}>
         <Left>
-          <Button onPress= {() => this.handleEditWebtoon()}>
+          <Button onPress= {() => this.handleEditWebtoon(item)}>
         <Thumbnail square source={{uri: item.url}}/>
          </Button>
         <Body>
@@ -78,7 +78,8 @@ export default class MyCreation extends Component {
         <Text note numberOfLines={1}>{item.sumEpisode} Episode</Text>
           </Body>
           </Left>
-      </ListItem>}>           
+      </ListItem>
+      }>           
       </List>
       <Fab
             style={{ backgroundColor: '#5067FF' }}
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
   },
   formAll: {
     marginTop: 10,
-    flex: 1
+    flex: 1,
   },  
   title: {
     padding: 5,
@@ -109,5 +110,8 @@ const styles = StyleSheet.create({
   },
   Slideshow:{
     width: 250,
-  }
+  },
+  Header:{
+    backgroundColor: '#ff6e6e',
+  },
 })

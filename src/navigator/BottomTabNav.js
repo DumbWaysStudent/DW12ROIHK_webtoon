@@ -46,8 +46,10 @@ const BottomTabNav = createBottomTabNavigator(
         return <Icon name={iconName} size={25} color='white' />;
       },
     }),
+  
     tabBarOptions: {
-      activeBackgroundColor:'tomato', 
+      activeBackgroundColor:'#ff6e6e',
+      //inactiveBackgroundColor:'#3419ff', 
       activeTintColor: 'white',
       inactiveTintColor: 'gray',
     },

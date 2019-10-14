@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions, SafeAreaView, FlatList } from 'react-native';
-import { Container, Content, Body, Item, Button, Input, Icon, Thumbnail, ListItem, Header,
-Left, Title, Right } from 'native-base'
+import {
+  Container, Content, Body, Item, Button, Input, Icon, Thumbnail, ListItem, Header,
+  Left, Title, Right
+} from 'native-base'
 
 export default class CreateWebtoon extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       search: '',
-      data : [{
+      data: [{
         ep: 1,
         date: '1 januari 2019',
         url: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
@@ -36,9 +38,10 @@ export default class CreateWebtoon extends React.Component {
     this.props.navigation.navigate('MyCreation')
   }
   handleCreateEpisode() {
-    this.props.navigation.navigate('CreateEpisode')
+    const episode = this.state.data.length + 1;
+    this.props.navigation.navigate('CreateEpisode', { episode: `Ep ${episode}` })
   }
-  
+
   handleEditEpisode() {
     this.props.navigation.navigate('EditEpisode')
   }
@@ -46,62 +49,62 @@ export default class CreateWebtoon extends React.Component {
   render() {
     return (
       <Container>
-        <Header>
-        <Left>
-            <Button  transparent
-            onPress={()=> this.props.navigation.goBack(null)} >
+        <Header style={styles.Header}>
+          <Left>
+            <Button transparent
+              onPress={() => this.props.navigation.goBack(null)} >
               <Icon name='arrow-back'
-               />
+              />
             </Button>
           </Left>
           <Body>
-            <Title style={styles.title}>My Webtoon Creation</Title>
-            </Body>
-            <Right>
-            <Button  transparent 
-            onPress={()=> this.handleMyCreation()}>
-              <Icon name='checkmark'/>
-              </Button>
-            </Right>
+            <Title style={styles.title}>Create Webtoon</Title>
+          </Body>
+          <Right>
+            <Button transparent
+              onPress={() => this.handleMyCreation()}>
+              <Icon name='checkmark' />
+            </Button>
+          </Right>
 
-          </Header>
-          <Content  style={styles.container}>
+        </Header>
+        <Content style={styles.container}>
           <View style={styles.formTitle}>
-              
+
             <Text style={styles.title}>Title</Text>
-          <Item rounded>
-            <Input
-              value={this.state.search}
-              onChangeText={(text) => this.setState({ search: text })}
-                />
+            <Item rounded>
+              <Input
+                value={this.state.search}
+                onChangeText={(text) => this.setState({ search: text })}
+              />
             </Item>
           </View>
           <View style={styles.formEp}>
             <Text style={styles.title}>Episode</Text>
-      <SafeAreaView style={styles.form}>
-        <FlatList
-          data={this.state.data}
-          renderItem={({item}) => 
-          <ListItem thumbnail>
-            <Button transparent onPress = {()=> this.handleEditEpisode() }>
-          <Thumbnail square source={{uri: item.url}}/></Button>
-            <Body>
-              <Text>Ep {item.ep}</Text>
-              <Text note numberOfLines={1}>{item.date}</Text>
-            </Body>
-          </ListItem>
-          }
-          keyExtractor={item => item.ep}
-          inverted/>
-          
-        </SafeAreaView>
-        </View>
-          <Button block rounded onPress = {()=> this.handleCreateEpisode()}>
-            <Text style={{color:'#ffffff'}} >+ Add Episode</Text>
+            <SafeAreaView style={styles.form}>
+              <FlatList
+                data={this.state.data}
+                renderItem={({ item }) =>
+                  <ListItem thumbnail>
+                    <Button transparent onPress={() => this.handleEditEpisode()}>
+                      <Thumbnail square source={{ uri: item.url }} /></Button>
+                    <Body>
+                      <Text>Ep {item.ep}</Text>
+                      <Text note numberOfLines={1}>{item.date}</Text>
+                    </Body>
+                  </ListItem>
+                }
+                keyExtractor={item => item.ep}
+                inverted />
+
+            </SafeAreaView>
+          </View>
+          <Button block rounded onPress={() => this.handleCreateEpisode()}>
+            <Text style={{ color: '#ffffff' }} >+ Add Episode</Text>
           </Button>
-              
+
         </Content>
-        </Container>
+      </Container>
     );
   }
 }
@@ -111,15 +114,18 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     paddingHorizontal: 10
   },
-  formTitle :{
+  formTitle: {
     marginVertical: 10
   },
   formEp: {
     padding: 5,
-  },  
+  },
   title: {
     padding: 5,
     width: 200,
     fontSize: 20,
-  }
+  },
+  Header: {
+    backgroundColor: '#ff6e6e',
+  },
 })

@@ -9,6 +9,8 @@ import CreateWebtoon from './../screens/CreateWebtoon';
 import CreateEpisode from './../screens/CreateEpisode';
 import EditWebtoon from './../screens/EditWebtoon';
 import EditEpisode from './../screens/EditEpisode';
+import ForYou from './../screens/ForYou';
+import Favorite from './../screens/MyFavorite';
 
 // without Bottom Tab Navigator
 const HeaderNav = createStackNavigator({
@@ -18,6 +20,18 @@ const HeaderNav = createStackNavigator({
           header: null
       }),
     },
+    ForYou: {
+      screen: ForYou,
+      navigationOptions: ({ navigation }) => ({
+          header:null
+      }),
+    },
+  Favorite: {
+        screen: Favorite,
+        navigationOptions: ({ navigation }) => ({
+            header:null
+        }),
+      },
     Detail: {
       screen: Detail,
       navigationOptions: ({ navigation }) => ({

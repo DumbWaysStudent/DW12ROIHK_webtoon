@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { Container, Content, Body, Item, Button, Input, Icon, List, Thumbnail, ListItem } from 'native-base'
+import { Container, Content, Body, Item, Button, Input, Icon, List, Thumbnail, ListItem, Card } from 'native-base'
 
 export default class MyFavorite extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      search: '',
+      //test : this.props.navigation.favorite,
       banners : [{
         id: 0,
         title: 'The Secret of Angel',
@@ -38,6 +38,8 @@ export default class MyFavorite extends React.Component {
         sumFav: 10,
         url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015800.jpg'
       }],
+      arrayholder: [],
+      data:[],
     };
   }
 
@@ -45,15 +47,35 @@ export default class MyFavorite extends React.Component {
     this.props.navigation.navigate('Detail')
   }
   
+  componentDidMount(){
+    //const { favorite } = this.props.navigation.state.params;
+    //this.setState({banners: favorite})
+    this.setState({arrayholder: this.state.banners})
+  }
+
+  searchFilterFunction = text => {    
+    const newData = this.state.arrayholder.filter((item) => {      
+      const itemData = item.title.toUpperCase();   
+       const textData = text.toUpperCase();
+        
+       return itemData.indexOf(textData) > -1;    
+       
+    });
+    
+    this.setState({ banners: newData });  
+  };
+  
   render() {
     return (
       <Container style={styles.container}>
         <Content>
+          
           <View style={styles.formSearch}>
-          <Item rounded>
+          <Item regular>
             <Input
-              value={this.state.search}
-              onChangeText={(text) => this.setState({ search: text })}
+              placeholder="Type Here..."        
+              lightTheme                
+              onChangeText={text => this.searchFilterFunction(text)}
                 />
             <Icon name='search'
             onPress= {() => alert('search')}/>
@@ -63,6 +85,7 @@ export default class MyFavorite extends React.Component {
             <Text style={styles.title}>Favorite</Text>
               <List dataArray={this.state.banners}
               renderRow={(item) =>
+                <Card>
               <ListItem thumbnail>
                   <Button onPress = {() => this.handleDetail()}>
                 <Thumbnail square source={{uri: item.url}}/> 
@@ -71,7 +94,9 @@ export default class MyFavorite extends React.Component {
                   <Text>{item.title}</Text>
               <Text note numberOfLines={1}>{item.sumFav} Favorite</Text>
                 </Body>
-              </ListItem>}>
+              </ListItem>
+              </Card>
+            }>
               </List>
               </View>
         </Content>
@@ -94,5 +119,9 @@ const styles = StyleSheet.create({
   title: {
     padding: 5,
     fontSize: 20,
-  }
+  },
+  Header:{
+    backgroundColor: '#ff6e6e',
+  },
+
 })
