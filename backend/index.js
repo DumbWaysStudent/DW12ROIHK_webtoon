@@ -8,18 +8,35 @@ const port = 5000
 app.use(bodyParser.json())
 
 //controllers
-const TodosController = require('./controllers/todos')
+const webtoonController = require('./controllers/webtoons')
+const episodeController = require('./controllers/episodes')
+const imageController = require('./controllers/images')
 
-app.group("/api/v1", (router) => {
+app.group("/api/v2", (router) => {
 
-    //todos API
-    router.get('/todos', TodosController.index)    
-    router.get('/todo/:id', TodosController.show)    
-    router.post('/todo', TodosController.store)    
-    router.patch('/todo/:id', TodosController.update)    
-    router.delete('/todo/:id', TodosController.delete)
-
+    //webtoon API
+    router.get('/webtoons', webtoonController.index)    
+    router.get('/webtoon/:id', webtoonController.show)    
+    router.post('/webtoon', webtoonController.store)    
+    router.patch('/webtoon/:id', webtoonController.update)    
+    router.delete('/webtoon/:id', webtoonController.delete)
+    
+    //episode API
+    router.get('/episodes', episodeController.index)    
+    router.get('/episode/:id', episodeController.show)    
+    router.post('/episode', episodeController.store)    
+    router.patch('/episode/:id', episodeController.update)    
+    router.delete('/episode/:id', episodeController.delete)
+    
+    //image API
+    router.get('/images', imageController.index)    
+    router.get('/image/:id', imageController.show)    
+    router.post('/image', imageController.store)    
+    router.patch('/image/:id', imageController.update)    
+    router.delete('/image/:id', imageController.delete)
+    
     //another APIs goes here
+
 })
 
 

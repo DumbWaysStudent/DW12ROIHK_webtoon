@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     webtoons.belongsTo(models.users, {
       as:'Owner',
-      foreignKey: 'created_by'
+      foreignKey: 'create_by'
     })
   };
   return webtoons;

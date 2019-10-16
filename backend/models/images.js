@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     page: DataTypes.INTEGER,
     image: DataTypes.STRING,
     episodeId: DataTypes.INTEGER,
-    create_by: DataTypes.INTEGER
   }, {});
   images.associate = function(models) {
     // associations can be defined here

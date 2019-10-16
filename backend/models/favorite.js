@@ -1,19 +1,19 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const favorite = sequelize.define('favorite', {
+  const favorites = sequelize.define('favorites', {
     id_user: DataTypes.INTEGER,
     id_webtoon: DataTypes.INTEGER
   }, {});
-  favorite.associate = function(models) {
+  favorites.associate = function(models) {
     // associations can be defined here
-    favorite.belongsTo(models.webtoons, {
+    favorites.belongsTo(models.webtoons, {
       as:'webtoon_id',
       foreignKey: 'id_webtoon'
     }),
-    favorite.belongsTo(models.users, {
+    favorites.belongsTo(models.users, {
       as:'user',
       foreignKey: 'id_user'
     })
   };
-  return favorite;
+  return favorites;
 };
