@@ -1,15 +1,10 @@
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
-import Login from './src/screens/Login'
+import HeaderNav from './HeaderNav'
+import BottomTabNav from './BottomTabNav'
 
-const RootNavigator = createStackNavigator({
-    Login: {
-        screen: Login,
-        navigationOptions: ({ navigation }) => ({
-            header: null
-        )}
-    }
-)}    
-
+const RootNavigator = createSwitchNavigator({
+  HeaderNav,
+  BottomTabNav
+});
 export default createAppContainer(RootNavigator);

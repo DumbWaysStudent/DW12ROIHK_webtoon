@@ -20,6 +20,18 @@ exports.show = (req, res) => {
     Webtoon.findOne({where:{id: req.params.id}}).then(result=> res.send(result))
     .catch(err => console.log(err))
 }
+exports.search = async (req, res) => {
+    await Webtoon.findAll({
+        where: {
+            title: { [Op.like]: `%${req.params.keyword}%` }
+        },        
+        include: [{
+            model: Webtoon,
+            as: "webtoonId"
+        }]
+    }).then(result=>res.send(result))
+    .catch(err => console.log(err))
+}
 
 exports.store = (req, res) => {
     Webtoon.create(req.body).then(webtoon=> {
