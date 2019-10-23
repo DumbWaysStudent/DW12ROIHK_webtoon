@@ -2,33 +2,33 @@ import { StyleSheet, Dimensions, Share, Image, FlatList, SafeAreaView } from 're
 import React, { Component } from 'react';
 import { Container, Header, Left, Body, Right, Button, Icon, Title, Content } from 'native-base';
 
-export default class DetailEpisode extends Component {
+import { connect } from 'react-redux'
+//import * as actionTodos from './../redux/actions/actionTodos'
+import * as actionImages from './../redux/actions/actionImages'
+
+class DetailEpisode extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       cover: {
-        ep: 'Episode 1',
+        ep: this.props.navigation.state.params.episode.title,
         image: 'https://webtoons-static.pstatic.net/image/pc/home/og_id.jpg?dt=2019090201'
       },
-      data: [{
-        ch: 1,
-        url: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-      }, {
-        ch: 2,
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015644.jpg'
-      }, {
-        ch: 3,
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015718.jpg'
-      }, {
-        ch: 4,
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015741.jpg'
-      }, {
-        ch: 5,
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015800.jpg'
-      }],
+      data: [],
     }
   }
+
+  componentDidMount() {
+    const webtoonId= this.props.navigation.state.params.webtoon
+    const episode= this.props.navigation.state.params.episode.id
+    this.props.handleGetImages(webtoonId,episode)
+
+    if (this.props.imagesLocal.images.isSuccess) {
+      this.setState({ data: this.props.imagesLocal.images.data })
+    }
+  }
+
   onClick() {
     Share.share({
       message: 'BAM: we\'re helping your business with awesome React Native apps',
@@ -69,14 +69,14 @@ export default class DetailEpisode extends Component {
         <Content style={styles.container}>
           <SafeAreaView style={styles.form}>
             <FlatList
-              data={this.state.data}
+              data={this.props.imagesLocal.images.data}
               renderItem={({ item }) =>
 
                 <Image
                   style={styles.imageForm}
-                  source={{ uri: item.url }} />
+                  source={{ uri: item.image }} />
               }
-              keyExtractor={item => item.ch}
+              keyExtractor={item => item.page}
             />
           </SafeAreaView>
         </Content>
@@ -100,3 +100,21 @@ const styles = StyleSheet.create({
     width: 200
   }
 })
+
+
+const mapStateToProps = state => {
+  return {
+    imagesLocal: state.images
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleGetImages: (webtoonId,episode) => dispatch(actionImages.handleGetImages(webtoonId,episode))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DetailEpisode);

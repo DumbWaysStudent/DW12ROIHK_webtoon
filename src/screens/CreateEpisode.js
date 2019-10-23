@@ -1,34 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, SafeAreaView, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, SafeAreaView, FlatList, AsyncStorage } from 'react-native';
 import {
   Container, Content, Body, Item, Button, Input, Icon, Thumbnail, ListItem, Header,
   Left, Title, Right
 } from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 
+import { connect } from 'react-redux'
+import * as actionMyImages from './../redux/actions/actionMyImages'
 
-export default class CreateEpisode extends React.Component {
+
+class CreateEpisode extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      EpisodeName: this.props.navigation.state.params.episode,
-      data: [{
-        id: 1,
-        fileName: 'dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg',
-        url: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-      }, {
-        id: 2,
-        fileName: '23 febuari 2019',
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015644.jpg'
-      }, {
-        id: 3,
-        fileName: '2153697_20170227015644.jpg',
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015718.jpg'
-      }, {
-        id: 4,
-        fileName: '2153697_20170227015741.jpg',
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015741.jpg'
-      }],
+      episode: this.props.navigation.state.params.episode.result,
+      webtoon: [],
+      filePath: [],
+      data: [],
+      param:[]
 
     };
   }
@@ -49,14 +39,20 @@ export default class CreateEpisode extends React.Component {
     this.setState({ data: newData })
   }
 
-  handleRemoveBtn(idx) {
-    let newData = this.state.data.filter((item) =>
-      item.id !== idx
-    );
-    for (let i = 0; i < newData.length; i++) {
-      newData[i].id = i + 1;
+  async handleRemoveBtn(idx) {
+    // let newData = this.state.data.filter((item) =>
+    //   item.id !== idx
+    // );
+    // for (let i = 0; i < newData.length; i++) {
+    //   newData[i].id = i + 1;
+    // }
+    // this.setState({ data: newData })
+    const param = {
+      ...this.state.param,
+      image: idx
     }
-    this.setState({ data: newData })
+    await this.props.handleDeleteMyImages(param)
+    this.userData()
   }
 
   chooseFile = () => {
@@ -90,13 +86,45 @@ export default class CreateEpisode extends React.Component {
         });
         const addImg = this.state.filePath.uri
         const fileName = this.state.filePath.fileName
-        const addData = { id: this.state.data.length + 1, fileName, url: addImg };
+        const addData = { page: this.state.data.length + 1, fileName, image: addImg };
         const newData = this.state.data.slice();
         newData.push(addData);
         this.setState({ data: newData })
-
+        
+        this.addData(addData)
       }
     });
+  }
+
+  
+  componentDidMount() {
+    this.userData()
+  }
+  async addData(newData){
+    const param = {
+      ...this.state.param,
+      data: newData
+    }
+    await this.props.handleAddMyImages(param)
+  }
+
+  async userData() {
+    this.setState({webtoon: this.props.navigation.state.params.webtoon})
+    //this.setState({episode: this.props.navigation.state.params.episode})
+    const param = {
+      token: await AsyncStorage.getItem('token'),
+      user: await AsyncStorage.getItem('userId'),
+      webtoon: await this.state.webtoon,
+      episode: await this.state.episode.id
+    }
+    
+    this.setState({param: param})
+    console.log(this.props.navigation.state.params.episode);
+    await this.props.handleGetMyImages(param)
+    
+    
+  
+    await this.setState({ data: this.props.myImages.images.data })
   }
 
   render() {
@@ -127,7 +155,7 @@ export default class CreateEpisode extends React.Component {
             <Text style={styles.title}>Name</Text>
             <Item rounded>
               <Input
-                value={this.state.EpisodeName}
+                value={this.state.episode.title}
                 onChangeText={(text) => this.setState({ EpisodeName: text })}
               />
             </Item>
@@ -140,12 +168,12 @@ export default class CreateEpisode extends React.Component {
                 renderItem={({ item }) =>
                   <ListItem thumbnail>
                     <Button transparent >
-                      <Thumbnail square source={{ uri: item.url }} /></Button>
+                      <Thumbnail square source={{ uri: item.image }} /></Button>
                     <Body>
-                      <Text>{item.id}. {item.fileName}</Text>
+                      <Text>{item.page}. {item.fileName}</Text>
                       <Button small block danger
                         style={{ width: 80 }}
-                        onPress={() => this.handleRemoveBtn(item.id)}>
+                        onPress={() => this.handleRemoveBtn(item.page)}>
                         <Text style={styles.ButtonText}> delete </Text></Button>
                     </Body>
                   </ListItem>
@@ -189,3 +217,24 @@ const styles = StyleSheet.create({
   },
 
 })
+
+
+
+const mapStateToProps = state => {
+  return {
+    myImages: state.myImages
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleGetMyImages: (param) => dispatch(actionMyImages.handleGetMyImages(param)),
+    handleAddMyImages: (param) => dispatch(actionMyImages.handleAddMyImages(param)),
+    handleDeleteMyImages: (param) => dispatch(actionMyImages.handleDeleteMyImages(param))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateEpisode);

@@ -1,9 +1,12 @@
 import React from 'react';
-import { SafeAreaView, View, Text, StyleSheet, Dimensions } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, Dimensions, AsyncStorage } from 'react-native';
 import { Item, Input, Button, Icon, Container } from 'native-base';
 
+import { connect } from 'react-redux'
+import * as actionUsers from './../redux/actions/actionUsers'
 
-export default class Login extends React.Component {
+
+class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,6 +28,8 @@ export default class Login extends React.Component {
     else {
       this.setState({ email: text })
       this.handleLogin()
+
+
     }
   }
 
@@ -36,14 +41,43 @@ export default class Login extends React.Component {
   }
 
 
-  handleLogin() {
-    this.props.navigation.navigate('BottomTabNav')
+  async handleLogin() {
+    let data = { email: this.state.email, password: this.state.password }
+    await this.props.handlePostUsers(data)
+    const dataUser= this.props.usersLocal.users.data
+    //alert(dataUser.user.id)
+    if (dataUser.token) {
+      await AsyncStorage.multiSet([
+        ['token', dataUser.token],
+        ['userId', `${dataUser.user.id}`],
+        ['userName', dataUser.user.name]
+      ])
+      // await AsyncStorage.setItem('userId', this.props.usersLocal.users.data.user.id)
+      this.props.navigation.navigate('BottomTabNav')
+      //alert('here')
+    } else {
+      alert(this.props.usersLocal.users.data.message)
+    }
+
   }
 
   demo() {
-    this.setState({ password: 'asd' })
-    this.setState({ email: 'this@mode.demo' })
+    this.setState({ password: 'rahasia' })
+    this.setState({ email: 'admin@gmail.com' })
   }
+
+  async passLogin() {
+    const token = await AsyncStorage.getItem('token');
+    if (token !== null) {
+      this.props.navigation.navigate('BottomTabNav')
+    }
+  }
+
+  // componentDidMount() {
+  //   this.passLogin()
+  // }
+
+
 
   render() {
     const { label, icon, onChange } = this.props;
@@ -119,3 +153,22 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   }
 })
+
+
+
+const mapStateToProps = state => {
+  return {
+    usersLocal: state.users
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handlePostUsers: (data) => dispatch(actionUsers.handlePostUsers(data))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);

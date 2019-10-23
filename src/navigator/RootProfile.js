@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, SafeAreaView, AsyncStorage } from 'react-native';
 import {
   Container, Header, Left, Body, Right,
   Button, Icon, Input, Title, Content, Card, Thumbnail, List, ListItem
 } from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 
-
 import ContainProfile from './../components/ContainProfile';
 
-export default class RootProfile extends Component {
+import { connect } from 'react-redux'
+import * as actionUsers from './../redux/actions/actionUsers'
+
+
+class RootProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -60,12 +63,28 @@ export default class RootProfile extends Component {
       isEdit: !prevState.isEdit
     }));
   }
-  handleLogout() {
+  async handleLogout() {
+    await AsyncStorage.removeItem('token')
     this.props.navigation.navigate('Login')
   }
   handleMyCreation() {
     this.props.navigation.navigate('MyCreation')
   }
+  async getData(){
+    //const userId = await AsyncStorage.getItem('userId');
+    // const params= {
+    //   token: await AsyncStorage.getItem('token'),
+    //   user: await AsyncStorage.getItem('userId')
+    // } 
+    // await this.props.handleGetUsers(params)
+    const name = await AsyncStorage.getItem('userName')
+    this.setState({name: name})
+
+  }
+  componentDidMount() {
+    this.getData()
+  }
+
 
   render() {
     let mode;
@@ -171,3 +190,21 @@ const styles = StyleSheet.create({
 
 })
 
+
+
+const mapStateToProps = state => {
+  return {
+    usersLocal: state.users
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleGetUsers: (params) => dispatch(actionUsers.handleGetUsers(params))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RootProfile);

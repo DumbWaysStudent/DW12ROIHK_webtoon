@@ -6,7 +6,11 @@ import {
 } from 'native-base'
 import Slideshow from 'react-native-image-slider-show';
 
-export default class ForYou extends React.Component {
+import { connect } from 'react-redux'
+import * as actionWebtoons from './../redux/actions/actionWebtoons'
+
+
+class ForYou extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,43 +18,23 @@ export default class ForYou extends React.Component {
       slidePos: 1,
       slideInterval: null,
       banners: [{
-        id: 0,
-        title: 'The Secret of Angel',
-        isFav: false,
-        favBtnColor: '#ff3333',
-        url: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-      }, {
-        id: 1,
-        title: 'Pasutri Gaje',
-        isFav: true,
-        favBtnColor: '#ff9c9c',
-        url: 'https://webtoons-static.pstatic.net/image/pc/home/og_id.jpg?dt=2019090201'
-      }, {
-        id: 2,
-        title: 'Young Mom',
-        isFav: false,
-        favBtnColor: '#ff3333',
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015644.jpg'
-      }, {
-        id: 3,
-        title: 'Young Dad',
-        isFav: true,
-        favBtnColor: '#ff9c9c',
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015718.jpg'
-      }, {
-        id: 4,
-        title: 'Old Mom',
-        isFav: true,
-        favBtnColor: '#ff9c9c',
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015741.jpg'
-      }, {
-        id: 5,
-        title: 'Young Dad',
-        isFav: true,
-        favBtnColor: '#ff9c9c',
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015800.jpg'
+        title: 'Webtoon 1',
+        genre: 'Barton waited twenty always repair in within we do.',
+        image: 'https://via.placeholder.com/1080',
+        favorite_count: 42,
+        isFavorite: 1,
+        create_by: 1
+      },
+      {
+        title: 'Webtoon 2',
+        genre: 'Barton waited twenty always repair in within we do.',
+        image: 'https://via.placeholder.com/1020',
+        favorite_count: 44,
+        isFavorite: 0,
+        create_by: 2
       }],
       favorite: [],
+      imageBanners: []
     };
   }
 
@@ -64,8 +48,20 @@ export default class ForYou extends React.Component {
       }, 2000)
     });
 
+
   }
   componentDidMount() {
+    this.props.handleGetWebtoons()
+
+    if (this.props.webtoonsLocal.webtoons.isSuccess) {
+      this.setState({ banners: this.props.webtoonsLocal.webtoons.data })
+    }
+
+    // let image = []
+    // for(let i=0; i < 2; i++){
+    //   image[i]= this.state.banners[i].image
+    // }
+    // this.setState({imageBanners: image})
 
     let newData = this.state.banners;
     //newData[idx].isFav = !newData[idx].isFav;
@@ -81,17 +77,17 @@ export default class ForYou extends React.Component {
   componentWillUnmount() {
     clearInterval(this.state.slideInterval);
   }
-  handleDetail() {
-    this.props.navigation.navigate('Detail')
+  handleDetail(item) {
+    this.props.navigation.navigate('Detail', {webtoon: item})
   }
 
   onHandleFavoriteBtn(idx) {
     let newData = this.state.banners;
     newData[idx].isFav = !newData[idx].isFav;
-    if(newData[idx].favBtnColor == '#ff9c9c'){
+    if (newData[idx].favBtnColor == '#ff9c9c') {
       newData[idx].favBtnColor = '#ff3333'
-    } else if(newData[idx].favBtnColor == '#ff3333'){
-      newData[idx].favBtnColor = '#ff9c9c'  
+    } else if (newData[idx].favBtnColor == '#ff3333') {
+      newData[idx].favBtnColor = '#ff9c9c'
     }
     // function update favorite list
     newData = this.state.banners.filter((item) =>
@@ -115,8 +111,8 @@ export default class ForYou extends React.Component {
             </Item>
 
           </Header>
-          <Header span 
-          style={styles.headerSlide}>
+          <Header span
+            style={styles.headerSlide}>
             <Slideshow height={200}
               dataSource={this.state.banners}
               position={this.state.slidePos}
@@ -137,7 +133,7 @@ export default class ForYou extends React.Component {
                   renderRow={(item) =>
                     <CardItem thumbnail bordered>
                       <Body>
-                        <Button transparent onPress={() => this.handleDetail()}>
+                        <Button transparent onPress={() => alert('belum')}>
                           <Thumbnail square source={{ uri: item.url }} />
                         </Button>
                         <Text>{item.title}</Text>
@@ -154,18 +150,18 @@ export default class ForYou extends React.Component {
 
               <List style={styles.formAll}
 
-                dataArray={this.state.banners} horizontal={false}
+                dataArray={this.props.webtoonsLocal.webtoons.data} horizontal={false}
                 renderRow={(item) =>
 
                   <CardItem thumbnail>
                     <Left>
-                      <Button transparent onPress={() => this.handleDetail()}>
-                        <Thumbnail square source={{ uri: item.url }} />
+                      <Button transparent onPress={() => this.handleDetail(item)}>
+                        <Thumbnail square source={{ uri: item.image }} />
                       </Button>
                       <Body>
                         <Text >{item.title}</Text>
-                        <Button block small 
-                        style={{backgroundColor: item.favBtnColor}}
+                        <Button block small
+                          style={{ backgroundColor: item.favBtnColor }}
                           onPress={() => this.onHandleFavoriteBtn(item.id)}>
                           <Text style={{ color: '#ffffff' }}> + Favorite </Text>
                         </Button>
@@ -183,17 +179,19 @@ export default class ForYou extends React.Component {
   }
 }
 
+
+
 const styles = StyleSheet.create({
   container: {
     width: Dimensions.get('window').width,
     //height: 500
   },
-  Header:{
+  Header: {
     backgroundColor: '#ff6e6e',
   },
-  headerSlide:{
-    height: 210, 
-    width: Dimensions.get('window').width, 
+  headerSlide: {
+    height: 210,
+    width: Dimensions.get('window').width,
     alignSelf: 'center',
     backgroundColor: '#ff6e6e',
   },
@@ -217,9 +215,27 @@ const styles = StyleSheet.create({
   Slideshow: {
     width: 250,
   },
-  favBtn:{
+  favBtn: {
   },
-  ListDiv:{
+  ListDiv: {
     backgroundColor: '#ff6e6e',
   }
 })
+
+
+const mapStateToProps = state => {
+  return {
+    webtoonsLocal: state.webtoons
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleGetWebtoons: () => dispatch(actionWebtoons.handleGetWebtoons())
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ForYou);
