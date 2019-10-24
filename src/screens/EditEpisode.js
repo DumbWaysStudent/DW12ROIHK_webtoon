@@ -19,13 +19,19 @@ class EditEpisode extends React.Component {
       webtoon: this.props.navigation.state.params.webtoon,
       filePath: [],
       data: [],
-      param:[]
+      param: []
     };
   }
 
 
-  handleCreateWebtoon() {
-    this.props.navigation.goBack(null)
+  async handleCreateWebtoon() {
+    const params = {
+      ...this.state.param,
+      data: this.state.episode
+    }
+    await this.props.handleUpdateMyEpisodes(params)
+
+    await this.props.navigation.goBack(null)
   }
   handleCreateEpisode() {
     this.props.navigation.navigate('CreateEpisode')
@@ -87,7 +93,7 @@ class EditEpisode extends React.Component {
         const newData = this.state.data.slice();
         newData.push(addData);
         this.setState({ data: newData })
-        
+
         this.addData(addData)
 
       }
@@ -97,7 +103,7 @@ class EditEpisode extends React.Component {
   componentDidMount() {
     this.userData()
   }
-  async addData(newData){
+  async addData(newData) {
     const param = {
       ...this.state.param,
       data: newData
@@ -112,19 +118,28 @@ class EditEpisode extends React.Component {
       webtoon: await this.state.webtoon,
       episode: await this.state.episode.id
     }
-    
-    this.setState({param: param})
+
+    this.setState({ param: param })
     await this.props.handleGetMyImages(param)
-  
+
     await this.setState({ data: this.props.myImages.images.data })
   }
 
-  async handleDeleteEpisode(){
+  async componentWillReceiveProps(nextProps) {
+    if (nextProps.myImages.images.data !== this.props.myImages.images.data) {
+      await this.props.handleGetMyImages(this.state.param)
+      await this.setState({ data: this.props.myImages.images.data })
+    }
+  }
+
+  async handleDeleteEpisode() {
     const param = {
       ...this.state.param
     }
-    await this.props.handleDeleteMyEpisodes(param)    
+    await this.props.handleDeleteMyEpisodes(param)
     await this.props.navigation.goBack(null)
+    //await this.props.handleGetMyEpisodes(this.state.param)
+    
   }
 
 
@@ -157,7 +172,11 @@ class EditEpisode extends React.Component {
             <Item rounded>
               <Input
                 value={this.state.episode.title}
-                onChangeText={(text) => this.setState({ EpisodeName: text })}
+                onChangeText={(text) => this.setState({
+                  episode: {
+                    title: text
+                  }
+                })}
               />
             </Item>
           </View>
@@ -241,7 +260,9 @@ const mapDispatchToProps = dispatch => {
     handleAddMyImages: (param) => dispatch(actionMyImages.handleAddMyImages(param)),
     handleDeleteMyImages: (param) => dispatch(actionMyImages.handleDeleteMyImages(param)),
 
-    handleDeleteMyEpisodes: (param) => dispatch(actionMyEpisodes.handleDeleteMyEpisodes(param))
+    handleGetMyEpisodes: (param) => dispatch(actionMyEpisodes.handleGetMyEpisodes(param)),
+    handleDeleteMyEpisodes: (param) => dispatch(actionMyEpisodes.handleDeleteMyEpisodes(param)),
+    handleUpdateMyEpisodes: (param) => dispatch(actionMyEpisodes.handleUpdateMyEpisodes(param))
   }
 }
 

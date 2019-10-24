@@ -73,6 +73,12 @@ class ForYou extends React.Component {
     this.props.navigation.setParams({ favorite: this.state.favorite })
 
   }
+  async componentWillReceiveProps(nextProps) {
+    if (nextProps.webtoonsLocal.webtoons.data !== this.props.webtoonsLocal.webtoons.data) {
+      //await this.props.handleGetWebtoons()
+      await this.setState({ data: this.props.webtoonsLocal.webtoons.data })
+    }
+  }
 
   componentWillUnmount() {
     clearInterval(this.state.slideInterval);

@@ -1,50 +1,88 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, SafeAreaView, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, SafeAreaView, FlatList, AsyncStorage } from 'react-native';
 import {
   Container, Content, Body, Item, Button, Input, Icon, Thumbnail, ListItem, Header,
   Left, Title, Right
 } from 'native-base'
 
-export default class CreateWebtoon extends React.Component {
+import { connect } from 'react-redux'
+import * as actionMyEpisodes from './../redux/actions/actionMyEpisodes'
+import * as actionMyWebtoons from './../redux/actions/actionMyWebtoons'
+
+class CreateWebtoon extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      search: '',
-      data: [{
-        ep: 1,
-        date: '1 januari 2019',
-        url: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-      }, {
-        ep: 2,
-        date: '23 febuari 2019',
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015644.jpg'
-      }, {
-        ep: 3,
-        date: '16 maret 2019',
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015718.jpg'
-      }, {
-        ep: 4,
-        date: '5 april 2019',
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015741.jpg'
-      }, {
-        ep: 5,
-        date: '3 mei 2019',
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015800.jpg'
-      }],
+      title: '',
+      id: this.props.navigation.state.params.webtoon.id,
+      data: [],
+      param: [],
+      newData: [],
     };
   }
 
-  handleMyCreation() {
-    this.props.navigation.navigate('MyCreation')
+  async handleMyCreation() {
+    const params= {
+      ...this.state.param,
+      data: {
+        title: this.state.title,
+        image: this.state.data[0].image
+      }
+    }
+    await this.props.handleUpdateMyWebtoons(params)
+    await this.props.navigation.navigate('MyCreation')
   }
-  handleCreateEpisode() {
-    const episode = this.state.data.length + 1;
-    this.props.navigation.navigate('CreateEpisode', { episode: `Ep ${episode}` })
+  async handleCreateEpisode() {
+    const newData = { title: `ep ${this.state.data.length + 1}`, image: 'https://via.placeholder.com/1080' }
+    await this.addData(newData)
+    await this.userData()
+    await this.props.navigation.navigate('CreateEpisode', {
+      episode: this.state.newData,
+      webtoon: this.state.id
+    })
   }
 
   handleEditEpisode() {
     this.props.navigation.navigate('EditEpisode')
   }
+
+
+  componentDidMount() {
+    this.userData()
+
+  }
+
+  async userData() {
+    const param = {
+      token: await AsyncStorage.getItem('token'),
+      user: await AsyncStorage.getItem('userId'),
+      webtoon: await this.state.id
+    }
+
+    await this.setState({ param: param })
+    await this.props.handleGetMyEpisodes(this.state.param)
+    await this.setState({ data: this.props.myEpisodes.episodes.data })
+  }
+
+  async componentWillReceiveProps(nextProps) {
+    if (nextProps.myEpisodes.episodes.data !== this.props.myEpisodes.episodes.data) {
+      await this.props.handleGetMyEpisodes(this.state.param)
+      await this.setState({ data: this.props.myEpisodes.episodes.data })
+    }
+  }
+
+
+  async addData(newData) {
+
+    const param = {
+      ...this.state.param,
+      data: newData
+    }
+    await this.props.handleAddMyEpisodes(param)
+    await this.setState({ newData: this.props.myEpisodes.episodes.data })
+    // await console.log(this.state.newData);
+  }
+
 
   render() {
     return (
@@ -74,7 +112,7 @@ export default class CreateWebtoon extends React.Component {
             <Text style={styles.title}>Title</Text>
             <Item rounded>
               <Input
-                value={this.state.search}
+                value={this.state.title}
                 onChangeText={(text) => this.setState({ search: text })}
               />
             </Item>
@@ -87,10 +125,10 @@ export default class CreateWebtoon extends React.Component {
                 renderItem={({ item }) =>
                   <ListItem thumbnail>
                     <Button transparent onPress={() => this.handleEditEpisode()}>
-                      <Thumbnail square source={{ uri: item.url }} /></Button>
+                      <Thumbnail square source={{ uri: item.image }} /></Button>
                     <Body>
-                      <Text>Ep {item.ep}</Text>
-                      <Text note numberOfLines={1}>{item.date}</Text>
+                      <Text>{item.title}</Text>
+                      <Text note numberOfLines={1}>{item.updatedAt}</Text>
                     </Body>
                   </ListItem>
                 }
@@ -129,3 +167,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff6e6e',
   },
 })
+
+
+const mapStateToProps = state => {
+  return {
+    myEpisodes: state.myEpisodes
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleGetMyEpisodes: (param) => dispatch(actionMyEpisodes.handleGetMyEpisodes(param)),
+    handleAddMyEpisodes: (param) => dispatch(actionMyEpisodes.handleAddMyEpisodes(param)),
+
+    handleUpdateMyWebtoons: (param) => dispatch(actionMyWebtoons.handleUpdateMyWebtoons(param))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateWebtoon);

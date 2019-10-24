@@ -44,7 +44,7 @@ class Login extends React.Component {
   async handleLogin() {
     let data = { email: this.state.email, password: this.state.password }
     await this.props.handlePostUsers(data)
-    const dataUser= this.props.usersLocal.users.data
+    const dataUser = this.props.usersLocal.users.data
     //alert(dataUser.user.id)
     if (dataUser.token) {
       await AsyncStorage.multiSet([
@@ -113,8 +113,11 @@ class Login extends React.Component {
               <Button block rounded light danger
                 onPress={() => this.validate(this.state.email)}>
                 <Text style={{ color: '#ffffff' }}>Log In</Text></Button>
+                <Item style={styles.Text}>
+              <Text>don't have an account yet </Text>
               <Text style={styles.TextMode}
-                onPress={() => this.demo()}>Demo Mode</Text>
+                onPress={() => this.props.navigation.navigate('Register')}> Register</Text>
+                </Item>
             </View>
           </View>
         </SafeAreaView>
@@ -148,8 +151,10 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   TextMode: {
-    marginTop: 20,
     color: 'blue',
+  },
+  Text: {
+    marginTop: 20,
     alignSelf: 'center',
   }
 })

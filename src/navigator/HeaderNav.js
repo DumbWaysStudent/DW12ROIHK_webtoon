@@ -3,6 +3,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import Loading from '../screens/LoadingScreen'
 import Login from './../screens/Login'
+import Register from './../screens/Register'
 import Detail from './../screens/Detail'
 import DetailEpisode from './../screens/DetailEpisode';
 import MyCreation from './../screens/MyCreation';
@@ -13,7 +14,7 @@ import EditEpisode from './../screens/EditEpisode';
 import ForYou from './../screens/ForYou';
 import Favorite from './../screens/MyFavorite';
 
-import ScreenTest from './../screens/ScreenTest';
+//import ScreenTest from './../screens/ScreenTest';
 
 // without Bottom Tab Navigator
 const HeaderNav = createStackNavigator({
@@ -25,6 +26,12 @@ const HeaderNav = createStackNavigator({
   },
   Login: {
     screen: Login,
+    navigationOptions: ({ navigation }) => ({
+      header: null
+    }),
+  },
+  Register: {
+    screen: Register,
     navigationOptions: ({ navigation }) => ({
       header: null
     }),
@@ -79,12 +86,6 @@ const HeaderNav = createStackNavigator({
   },
   EditEpisode: {
     screen: EditEpisode,
-    navigationOptions: ({ navigation }) => ({
-      header: null
-    }),
-  },
-  ScreenTest: {
-    screen: ScreenTest,
     navigationOptions: ({ navigation }) => ({
       header: null
     }),

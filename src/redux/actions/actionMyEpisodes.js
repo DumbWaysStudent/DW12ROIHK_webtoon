@@ -32,6 +32,18 @@ export const handleDeleteMyEpisodes = (param) => ({
     /webtoon/${param.webtoon}/episode/${param.episode}`,
     headers: {
       Authorization: `bearer ${param.token}`
+    }
+  })
+});
+
+export const handleUpdateMyEpisodes = (param) => ({
+  type: types.DELETE_MY_EPISODES,
+  payload: axios({
+    method: 'PATCH',
+    url: `https://positive-toon-rest-api.herokuapp.com/api/v1/user/${param.user}
+    /webtoon/${param.webtoon}/episode/${param.episode}`,
+    headers: {
+      Authorization: `bearer ${param.token}`
     },
     data: param.data
   })

@@ -20,7 +20,7 @@ class RootProfile extends Component {
       icon: 'create',
 
       name: 'Your name',
-      filePath: { uri: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015800.jpg' },
+      filePath: { uri: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png' },
       isEdit: false
     }
   }
@@ -65,7 +65,7 @@ class RootProfile extends Component {
   }
   async handleLogout() {
     await AsyncStorage.removeItem('token')
-    this.props.navigation.navigate('Login')
+    await this.props.navigation.navigate('Login')
   }
   handleMyCreation() {
     this.props.navigation.navigate('MyCreation')

@@ -7,6 +7,7 @@ import {
 
 import { connect } from 'react-redux'
 import * as actionMyEpisodes from './../redux/actions/actionMyEpisodes'
+import * as actionMyWebtoons from './../redux/actions/actionMyWebtoons'
 
 class EditWebtoon extends React.Component {
   constructor(props) {
@@ -23,6 +24,11 @@ class EditWebtoon extends React.Component {
         //url: this.props.navigation.state.params.addEpisode.url,
       }
     };
+  }
+
+  async deleteWebtoon(){
+    await this.props.handleDeleteMyWebtoons(this.state.param)
+    await this.props.navigation.navigate('MyCreation')
   }
 
   handleMyCreation(title) {
@@ -48,7 +54,8 @@ class EditWebtoon extends React.Component {
     //this.setState({title: this.props.navigation.state.params.webtoon.title})
   }
 
-  componentWillMount() {
+ 
+     componentDidMount() {
     this.userData()
     
    }
@@ -61,10 +68,16 @@ class EditWebtoon extends React.Component {
      } 
      
      await this.setState({param: param})
-     await this.props.handleGetMyEpisodes(param)
+     await this.props.handleGetMyEpisodes(this.state.param)
      await this.setState({data: this.props.myEpisodes.episodes.data})
    }
-
+   
+   async componentWillReceiveProps(nextProps) {
+    if (nextProps.myEpisodes.episodes.data !== this.props.myEpisodes.episodes.data) {
+      await this.props.handleGetMyEpisodes(this.state.param)
+      await this.setState({ data: this.props.myEpisodes.episodes.data })
+    }
+  }
    
   async addData(newData){
     
@@ -79,7 +92,6 @@ class EditWebtoon extends React.Component {
  
 
   render() {
-    
     return (
       <Container>
         <Header style={styles.Header}>
@@ -138,7 +150,7 @@ class EditWebtoon extends React.Component {
           </Button>
           <Button block square danger
             style={{ marginVertical: 5 }}
-            onPress={() => alert('Delete Webtoon')}>
+            onPress={() => this.deleteWebtoon()}>
             <Text style={{ color: '#ffffff' }} >Delete Webtoon</Text>
           </Button>
         </Content>
@@ -178,7 +190,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     handleGetMyEpisodes: (param) => dispatch(actionMyEpisodes.handleGetMyEpisodes(param)),
-    handleAddMyEpisodes: (param) => dispatch(actionMyEpisodes.handleAddMyEpisodes(param))
+    handleAddMyEpisodes: (param) => dispatch(actionMyEpisodes.handleAddMyEpisodes(param)),
+    handleDeleteMyWebtoons: (param) => dispatch(actionMyWebtoons.handleDeleteMyWebtoons(param))
   }
 }
 

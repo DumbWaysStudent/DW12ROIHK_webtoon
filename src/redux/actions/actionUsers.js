@@ -7,13 +7,11 @@ export const handlePostUsers = (data) => ({
   data)
 });
 
-export const handleGetUsers = (params) => ({
+export const handleRegister = (data) => ({
   type: types.GET_USERS,
   payload: axios({
-    method: 'get',
-    url:`https://positive-toon-rest-api.herokuapp.com/api/v1/user/${params.user}`,
-    headers: {
-      Authorization: `bearer ${params.token}`
-    }
+    method: 'post',
+    url:`https://positive-toon-rest-api.herokuapp.com/api/v1/register`,
+    data: data
   })
 });

@@ -8,26 +8,35 @@ import ImagePicker from 'react-native-image-picker';
 
 import { connect } from 'react-redux'
 import * as actionMyImages from './../redux/actions/actionMyImages'
+import * as actionMyEpisodes from './../redux/actions/actionMyEpisodes'
 
 
 class CreateEpisode extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      episode: this.props.navigation.state.params.episode.result,
+      episodeName: this.props.navigation.state.params.episode.result.title,
+      episode: [],
       webtoon: [],
       filePath: [],
       data: [],
-      param:[]
+      param: []
 
     };
   }
 
-  handleCreateWebtoon() {
-    this.props.navigation.goBack(null, { addEpisode: this.state.addEpisode })
+  async handleCreateWebtoon() {
+    const params = {
+      ...this.state.param,
+      data: this.state.episode
+    }
+    await this.props.handleUpdateMyEpisodes(params)
+    await this.props.navigation.goBack(null, { addEpisode: this.state.addEpisode })
   }
-  handleCreateEpisode() {
-    this.props.navigation.navigate('CreateEpisode')
+  async handleCreateEpisode() {
+    //console.log(this.props.navigation.state.params.episode);
+
+    await this.props.navigation.navigate('CreateEpisode')
   }
 
 
@@ -90,17 +99,18 @@ class CreateEpisode extends React.Component {
         const newData = this.state.data.slice();
         newData.push(addData);
         this.setState({ data: newData })
-        
+
         this.addData(addData)
       }
     });
   }
 
-  
-  componentDidMount() {
+
+  componentWillMount() {
+    // this.setState({EpisodeName: this.props.navigation.state.params.episode.result.title})
     this.userData()
   }
-  async addData(newData){
+  async addData(newData) {
     const param = {
       ...this.state.param,
       data: newData
@@ -109,22 +119,25 @@ class CreateEpisode extends React.Component {
   }
 
   async userData() {
-    this.setState({webtoon: this.props.navigation.state.params.webtoon})
-    //this.setState({episode: this.props.navigation.state.params.episode})
+    this.setState({ webtoon: this.props.navigation.state.params.webtoon })
+    this.setState({ episode: this.props.navigation.state.params.episode.result })
     const param = {
       token: await AsyncStorage.getItem('token'),
       user: await AsyncStorage.getItem('userId'),
       webtoon: await this.state.webtoon,
       episode: await this.state.episode.id
     }
-    
-    this.setState({param: param})
-    console.log(this.props.navigation.state.params.episode);
+    this.setState({ param: param })
+    //console.log(this.props.navigation.state.params.episode);
     await this.props.handleGetMyImages(param)
-    
-    
-  
     await this.setState({ data: this.props.myImages.images.data })
+  }
+
+  async componentWillReceiveProps(nextProps) {
+    if (nextProps.myImages.images.data !== this.props.myImages.images.data) {
+      await this.props.handleGetMyImages(this.state.param)
+      await this.setState({ data: this.props.myImages.images.data })
+    }
   }
 
   render() {
@@ -156,7 +169,12 @@ class CreateEpisode extends React.Component {
             <Item rounded>
               <Input
                 value={this.state.episode.title}
-                onChangeText={(text) => this.setState({ EpisodeName: text })}
+                onChangeText={(text) =>
+                  this.setState({
+                    episode: {
+                      title: text
+                    }
+                  })}
               />
             </Item>
           </View>
@@ -230,7 +248,9 @@ const mapDispatchToProps = dispatch => {
   return {
     handleGetMyImages: (param) => dispatch(actionMyImages.handleGetMyImages(param)),
     handleAddMyImages: (param) => dispatch(actionMyImages.handleAddMyImages(param)),
-    handleDeleteMyImages: (param) => dispatch(actionMyImages.handleDeleteMyImages(param))
+    handleDeleteMyImages: (param) => dispatch(actionMyImages.handleDeleteMyImages(param)),
+
+    handleUpdateMyEpisodes: (param) => dispatch(actionMyEpisodes.handleUpdateMyEpisodes(param))
   }
 }
 
