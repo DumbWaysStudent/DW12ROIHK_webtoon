@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, AsyncStorage } from 'react-native';
+import { View, Text, AsyncStorage, Image } from 'react-native';
 
 export default class LoadingScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      
+  timePassed: false
     };
   }
 
@@ -18,15 +20,17 @@ export default class LoadingScreen extends Component {
     }
   }
 
-  componentDidMount(){
-    this.passLogin()
+ async componentDidMount(){
+     await this.passLogin()
   }
 
   render() {
+
     return (
-      <View>
-        <Text> Loading </Text>
-      </View>
+        <Image 
+        source={{uri: 'https://raw.githubusercontent.com/DumbWaysStudent/DW12ROIHK_webtoon/implementasi_backend/src/images/loading.jpeg'}} 
+        style={{ flex: 1}}/>
+ 
     );
   }
 }

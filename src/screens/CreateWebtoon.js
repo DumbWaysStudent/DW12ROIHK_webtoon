@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions, SafeAreaView, FlatList, AsyncStorage } from 'react-native';
 import {
   Container, Content, Body, Item, Button, Input, Icon, Thumbnail, ListItem, Header,
-  Left, Title, Right
+  Left, Title, Right, Spinner
 } from 'native-base'
 
 import { connect } from 'react-redux'
@@ -14,6 +14,7 @@ class CreateWebtoon extends React.Component {
     super(props);
     this.state = {
       title: '',
+      genre:'',
       id: this.props.navigation.state.params.webtoon.id,
       data: [],
       param: [],
@@ -26,7 +27,8 @@ class CreateWebtoon extends React.Component {
       ...this.state.param,
       data: {
         title: this.state.title,
-        image: this.state.data[0].image
+        genre: this.state.genre,
+        image: 'https://via.placeholder.com/1080'
       }
     }
     await this.props.handleUpdateMyWebtoons(params)
@@ -47,7 +49,7 @@ class CreateWebtoon extends React.Component {
   }
 
 
-  componentDidMount() {
+  componentWillMount() {
     this.userData()
 
   }
@@ -58,17 +60,14 @@ class CreateWebtoon extends React.Component {
       user: await AsyncStorage.getItem('userId'),
       webtoon: await this.state.id
     }
-
     await this.setState({ param: param })
-    await this.props.handleGetMyEpisodes(this.state.param)
-    await this.setState({ data: this.props.myEpisodes.episodes.data })
+    this.getData()
   }
 
-  async componentWillReceiveProps(nextProps) {
-    if (nextProps.myEpisodes.episodes.data !== this.props.myEpisodes.episodes.data) {
-      await this.props.handleGetMyEpisodes(this.state.param)
-      await this.setState({ data: this.props.myEpisodes.episodes.data })
-    }
+  async getData(){
+    await this.props.handleGetMyEpisodes(this.state.param)
+    await this.setState({ data: this.props.myEpisodes.episodes.data })
+
   }
 
 
@@ -85,6 +84,14 @@ class CreateWebtoon extends React.Component {
 
 
   render() {
+    if (this.props.myEpisodes.isLoading) {
+      return (<Spinner />)
+    }
+    else if (this.props.myEpisodes.isSuccess) {
+      // alert('here')
+      if (this.props.myEpisodes.needRefresh) {
+        this.getData()
+      }
     return (
       <Container>
         <Header style={styles.Header}>
@@ -113,9 +120,16 @@ class CreateWebtoon extends React.Component {
             <Item rounded>
               <Input
                 value={this.state.title}
-                onChangeText={(text) => this.setState({ search: text })}
+                onChangeText={(text) => this.setState({ title: text })}
               />
             </Item>
+              <Text style={styles.title}>Genre</Text>
+              <Item rounded>
+                <Input
+                  value={this.state.genre}
+                  onChangeText={(text) => this.setState({ genre: text })}
+                />
+              </Item>
           </View>
           <View style={styles.formEp}>
             <Text style={styles.title}>Episode</Text>
@@ -144,6 +158,8 @@ class CreateWebtoon extends React.Component {
         </Content>
       </Container>
     );
+  }
+  else { return (<Spinner />) }
   }
 }
 

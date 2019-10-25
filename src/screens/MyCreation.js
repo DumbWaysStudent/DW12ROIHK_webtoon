@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Dimensions, AsyncStorage } from 'react-native';
 import {
   Container, Header, Left, Body,
-  Button, Icon, Title, Thumbnail, List, ListItem, Fab, Card, Right
+  Button, Icon, Title, Thumbnail, List, ListItem, Fab, Card, Right, Spinner
 } from 'native-base';
 
 import { connect } from 'react-redux'
@@ -39,7 +39,7 @@ class MyCreation extends Component {
     this.props.navigation.navigate('Profile')
   }
 
-  async componentWillMount() {
+  componentWillMount() {
     this.userData()
 
 
@@ -52,7 +52,11 @@ class MyCreation extends Component {
     }
 
     await this.setState({ param: param })
-    await this.props.handleGetMyWebtoons(param)
+    await this.getData()
+  }
+  async getData() {
+
+    await this.props.handleGetMyWebtoons(this.state.param)
     await this.setState({ data: this.props.myWebtoons.webtoons.data })
   }
 
@@ -65,47 +69,57 @@ class MyCreation extends Component {
   //   }
   // }
   render() {
+    if (this.props.myWebtoons.isLoading) {
+      return (<Spinner />)
+    }
+    else if (this.props.myWebtoons.isSuccess) {
+      // alert('here')
+      console.log('here');
+      if (this.props.myWebtoons.needRefresh) {
+        this.getData()
+      }
+      return (
+        <Container>
+          <Header style={styles.Header}>
+            <Left>
+              <Button transparent>
+                <Icon name='arrow-back'
+                  onPress={() => this.handleProfile()} />
+              </Button>
+            </Left>
+            <Body>
+              <Title style={styles.title}>My Webtoon Creation</Title>
+            </Body>
+          </Header>
+          <View style={styles.formAll}>
+            <List
+              dataArray={this.state.data}
+              renderRow={(item) =>
+                <ListItem thumbnail style={styles.formItem}>
+                  <Left>
+                    <Button onPress={() => this.handleEditWebtoon(item)}>
+                      <Thumbnail square source={{ uri: item.image }} />
+                    </Button>
+                    <Body>
+                      <Text >{item.title}</Text>
+                      <Text note numberOfLines={1}>{item.genre}</Text>
+                    </Body>
+                  </Left>
 
-    return (
-      <Container>
-        <Header style={styles.Header}>
-          <Left>
-            <Button transparent>
-              <Icon name='arrow-back'
-                onPress={() => this.handleProfile()} />
-            </Button>
-          </Left>
-          <Body>
-            <Title style={styles.title}>My Webtoon Creation</Title>
-          </Body>
-        </Header>
-        <View style={styles.formAll}>
-          <List
-            dataArray={this.state.data}
-            renderRow={(item) =>
-              <ListItem thumbnail style={styles.formItem}>
-                <Left>
-                  <Button onPress={() => this.handleEditWebtoon(item)}>
-                    <Thumbnail square source={{ uri: item.image }} />
-                  </Button>
-                  <Body>
-                    <Text >{item.title}</Text>
-                    <Text note numberOfLines={1}>{item.sumEpisode} Episode</Text>
-                  </Body>
-                </Left>
-
-              </ListItem>
-            }>
-          </List>
-          <Fab
-            style={{ backgroundColor: '#5067FF' }}
-            position="bottomRight"
-            onPress={() => this.handleCreateWebtoon()}>
-            <Icon name="add" />
-          </Fab>
-        </View>
-      </Container>
-    );
+                </ListItem>
+              }>
+            </List>
+            <Fab
+              style={{ backgroundColor: '#5067FF' }}
+              position="bottomRight"
+              onPress={() => this.handleCreateWebtoon()}>
+              <Icon name="add" />
+            </Fab>
+          </View>
+        </Container>
+      );
+    }
+    else { return (<Spinner />) }
   }
 }
 const styles = StyleSheet.create({

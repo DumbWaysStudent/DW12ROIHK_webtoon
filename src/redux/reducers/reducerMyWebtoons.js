@@ -4,6 +4,7 @@ const initialState = {
   isLoading: false,
   isError: false,
   isSuccess: false,
+  needRefresh: false,
   webtoons: [{
     data: [
       {
@@ -31,7 +32,8 @@ export default function reducerMyWebtoons(state = initialState, action) {
     case `${types.GET_MY_WEBTOONS}_PENDING`:
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        needRefresh: false,
       };
 
     case `${types.GET_MY_WEBTOONS}_FULFILLED`:
@@ -39,6 +41,7 @@ export default function reducerMyWebtoons(state = initialState, action) {
         ...state,
         isLoading: false,
         isSuccess: true,
+        needRefresh: false,
         webtoons: action.payload
       };
 
@@ -47,6 +50,7 @@ export default function reducerMyWebtoons(state = initialState, action) {
         ...state,
         isLoading: false,
         isError: true,
+        needRefresh: false,
       };
 
     //==============================Add My Webtoon==============================//
@@ -61,6 +65,7 @@ export default function reducerMyWebtoons(state = initialState, action) {
         ...state,
         isLoading: false,
         isSuccess: true,
+        needRefresh: true,
         webtoons: action.payload
       };
 
@@ -83,6 +88,7 @@ export default function reducerMyWebtoons(state = initialState, action) {
         ...state,
         isLoading: false,
         isSuccess: true,
+        needRefresh: true,
         webtoons: action.payload
       };
 
@@ -106,6 +112,7 @@ export default function reducerMyWebtoons(state = initialState, action) {
         ...state,
         isLoading: false,
         isSuccess: true,
+        needRefresh: true,
         webtoons: action.payload
       };
 

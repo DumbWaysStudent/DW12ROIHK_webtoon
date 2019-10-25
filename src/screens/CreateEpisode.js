@@ -133,12 +133,12 @@ class CreateEpisode extends React.Component {
     await this.setState({ data: this.props.myImages.images.data })
   }
 
-  async componentWillReceiveProps(nextProps) {
-    if (nextProps.myImages.images.data !== this.props.myImages.images.data) {
-      await this.props.handleGetMyImages(this.state.param)
-      await this.setState({ data: this.props.myImages.images.data })
-    }
-  }
+  // async componentWillReceiveProps(nextProps) {
+  //   if (nextProps.myImages.images.data !== this.props.myImages.images.data) {
+  //     await this.props.handleGetMyImages(this.state.param)
+  //     await this.setState({ data: this.props.myImages.images.data })
+  //   }
+  // }
 
   render() {
     return (

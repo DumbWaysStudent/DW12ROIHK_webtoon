@@ -4,6 +4,7 @@ const initialState = {
   isLoading: false,
   isError: false,
   isSuccess: false,
+  needRefresh: false,
   episodes: []
 };
 
@@ -20,6 +21,7 @@ export default function reducerMyEpisodes(state = initialState, action) {
         ...state,
         isLoading: false,
         isSuccess: true,
+        needRefresh: false,
         episodes: action.payload
       };
 
@@ -42,6 +44,7 @@ export default function reducerMyEpisodes(state = initialState, action) {
         ...state,
         isLoading: false,
         isSuccess: true,
+        needRefresh: true,
         episodes: action.payload
       };
 
@@ -63,6 +66,7 @@ export default function reducerMyEpisodes(state = initialState, action) {
         ...state,
         isLoading: false,
         isSuccess: true,
+        needRefresh: true,
         episodes: action.payload
       };
 
@@ -85,6 +89,7 @@ export default function reducerMyEpisodes(state = initialState, action) {
         ...state,
         isLoading: false,
         isSuccess: true,
+        needRefresh: true,
         episodes: action.payload
       };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Text, StyleSheet, Dimensions, AsyncStorage } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, Dimensions, AsyncStorage, Image, ImageBackground } from 'react-native';
 import { Item, Input, Button, Icon, Container } from 'native-base';
 
 import { connect } from 'react-redux'
@@ -10,8 +10,8 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
+      email: 'admin@gmail.com',
+      password: 'rahasia',
       icon: 'eye-off',
       passMode: true
     };
@@ -85,12 +85,14 @@ class Login extends React.Component {
       <Container style={styles.container}>
         <SafeAreaView>
           <View >
-            <View style={[styles.marginTitle, styles.marginSubTitle]}>
-              <Text style={styles.title}>LOGIN</Text>
-              <Text style={styles.subTitle}>Log in with your WEBTOON account</Text>
+            <View style={[styles.marginTitle]}>
+            <Image 
+        source={{uri: 'https://raw.githubusercontent.com/DumbWaysStudent/DW12ROIHK_webtoon/implementasi_backend/src/images/logo%20positif%20toon.png'}} 
+        style={{height: 200, width: 200}}/>
+              <Text style={styles.subTitle}>Login with your account</Text>
             </View>
             <View>
-              <Text>Email</Text>
+              <Text style={styles.text}>Email</Text>
               <Item regular
                 style={styles.formItem}>
                 <Input
@@ -100,7 +102,7 @@ class Login extends React.Component {
                   autoCapitalize='none'
                   keyboardType='email-address' />
               </Item >
-              <Text>Password</Text>
+              <Text style={styles.text}>Password</Text>
               <Item regular
                 style={styles.formItem}>
                 <Input
@@ -114,7 +116,7 @@ class Login extends React.Component {
                 onPress={() => this.validate(this.state.email)}>
                 <Text style={{ color: '#ffffff' }}>Log In</Text></Button>
                 <Item style={styles.Text}>
-              <Text>don't have an account yet </Text>
+              <Text style={styles.text}>don't have an account yet </Text>
               <Text style={styles.TextMode}
                 onPress={() => this.props.navigation.navigate('Register')}> Register</Text>
                 </Item>
@@ -131,7 +133,7 @@ const styles = StyleSheet.create({
     //flex: 1,
     width: Dimensions.get('window').width,
     paddingHorizontal: 10,
-    backgroundColor: '#f5f2f2'
+    //backgroundColor: 'skyblue'
   },
   marginTitle: {
     alignItems: 'center',
@@ -144,11 +146,20 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 50
   },
+  text: {
+    //color: 'white',
+  },
   subTitle: {
-    fontSize: 20
+    fontSize: 20,
+    //color: 'white',
+  },
+  box:{
+    //borderColor: 'white',
+    
   },
   formItem: {
-    marginBottom: 10
+    marginBottom: 10,
+    //borderColor: 'white'
   },
   TextMode: {
     color: 'blue',

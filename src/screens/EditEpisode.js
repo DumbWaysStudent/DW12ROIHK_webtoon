@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions, SafeAreaView, FlatList, AsyncStorage } from 'react-native';
 import {
   Container, Content, Body, Item, Button, Input, Icon, Thumbnail, ListItem, Header,
-  Left, Title, Right
+  Left, Title, Right, Spinner
 } from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 
@@ -55,7 +55,7 @@ class EditEpisode extends React.Component {
       image: idx
     }
     await this.props.handleDeleteMyImages(param)
-    this.userData()
+   // this.userData()
   }
 
   chooseFile = () => {
@@ -93,21 +93,27 @@ class EditEpisode extends React.Component {
         const newData = this.state.data.slice();
         newData.push(addData);
         this.setState({ data: newData })
-
         this.addData(addData)
 
       }
     });
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this.userData()
   }
   async addData(newData) {
     const param = {
       ...this.state.param,
-      data: newData
+      data: {
+        page: newData.page,
+        image: newData.image
+      }
     }
+    console.log('=====add====');
+    
+    console.log(param);
+    
     await this.props.handleAddMyImages(param)
   }
 
@@ -119,17 +125,17 @@ class EditEpisode extends React.Component {
       episode: await this.state.episode.id
     }
 
-    this.setState({ param: param })
-    await this.props.handleGetMyImages(param)
-
-    await this.setState({ data: this.props.myImages.images.data })
+    await this.setState({ param: param })
+    await this.getData()
+    
+    console.log('=====get====');
+    
+    console.log(param);
   }
 
-  async componentWillReceiveProps(nextProps) {
-    if (nextProps.myImages.images.data !== this.props.myImages.images.data) {
-      await this.props.handleGetMyImages(this.state.param)
-      await this.setState({ data: this.props.myImages.images.data })
-    }
+  async getData(){
+    await this.props.handleGetMyImages(this.state.param)
+    await this.setState({ data: this.props.myImages.images.data })
   }
 
   async handleDeleteEpisode() {
@@ -139,84 +145,94 @@ class EditEpisode extends React.Component {
     await this.props.handleDeleteMyEpisodes(param)
     await this.props.navigation.goBack(null)
     //await this.props.handleGetMyEpisodes(this.state.param)
-    
+
   }
 
 
   render() {
-    return (
-      <Container>
-        <Header style={styles.Header}>
-          <Left>
-            <Button transparent
-              onPress={() => this.props.navigation.goBack(null)} >
-              <Icon name='arrow-back'
-              />
-            </Button>
-          </Left>
-          <Body>
-            <Title style={styles.title}>Edit Episode</Title>
-          </Body>
-          <Right>
-            <Button transparent
-              onPress={() => this.handleCreateWebtoon()}>
-              <Icon name='checkmark' />
-            </Button>
-          </Right>
+    if (this.props.myImages.isLoading) {
+      return (<Spinner />)
+    }
+    else if (this.props.myImages.isSuccess) {
+      // alert('here')
+      if (this.props.myImages.needRefresh) {
+        this.getData()
+      }
+      return (
+        <Container>
+          <Header style={styles.Header}>
+            <Left>
+              <Button transparent
+                onPress={() => this.props.navigation.goBack(null)} >
+                <Icon name='arrow-back'
+                />
+              </Button>
+            </Left>
+            <Body>
+              <Title style={styles.title}>Edit Episode</Title>
+            </Body>
+            <Right>
+              <Button transparent
+                onPress={() => this.handleCreateWebtoon()}>
+                <Icon name='checkmark' />
+              </Button>
+            </Right>
 
-        </Header>
-        <Content style={styles.container}>
-          <View style={styles.formTitle}>
+          </Header>
+          <Content style={styles.container}>
+            <View style={styles.formTitle}>
 
-            <Text style={styles.title}>Name</Text>
-            <Item rounded>
-              <Input
-                value={this.state.episode.title}
-                onChangeText={(text) => this.setState({
-                  episode: {
-                    title: text
+              <Text style={styles.title}>Name</Text>
+              <Item rounded>
+                <Input
+                  value={this.state.episode.title}
+                  onChangeText={(text) => this.setState({
+                    episode: {
+                      title: text
+                    }
+                  })}
+                />
+              </Item>
+            </View>
+            <View style={styles.formEp}>
+              <Text style={styles.title}>Add Images</Text>
+              <SafeAreaView style={styles.form}>
+                <FlatList
+                  data={this.state.data}
+                  renderItem={({ item }) =>
+                    <ListItem thumbnail>
+                      <Button transparent >
+                        <Thumbnail square source={{ uri: item.image }} /></Button>
+                      <Body>
+                        <Text>{item.page}. {item.image}</Text>
+                        <Button small block danger
+                          style={{ width: 80 }}
+                          onPress={() => this.handleRemoveBtn(item.id)}>
+                          <Text style={styles.ButtonText}> delete </Text></Button>
+                      </Body>
+                    </ListItem>
                   }
-                })}
-              />
-            </Item>
-          </View>
-          <View style={styles.formEp}>
-            <Text style={styles.title}>Add Images</Text>
-            <SafeAreaView style={styles.form}>
-              <FlatList
-                data={this.state.data}
-                renderItem={({ item }) =>
-                  <ListItem thumbnail>
-                    <Button transparent >
-                      <Thumbnail square source={{ uri: item.image }} /></Button>
-                    <Body>
-                      <Text>{item.page}. {item.image}</Text>
-                      <Button small block danger
-                        style={{ width: 80 }}
-                        onPress={() => this.handleRemoveBtn(item.id)}>
-                        <Text style={styles.ButtonText}> delete </Text></Button>
-                    </Body>
-                  </ListItem>
-                }
-                keyExtractor={item => item.page}
-              />
+                  keyExtractor={item => item.page}
+                />
 
-            </SafeAreaView>
-          </View>
-          <Button block square style={{ marginVertical: 5 }}
-            title='Choose File'
-            onPress={this.chooseFile.bind(this)}>
-            <Text style={{ color: '#ffffff' }} >+ Image</Text>
-          </Button>
-          <Button block square danger
-            style={{ marginVertical: 5 }}
-            onPress={() => this.handleDeleteEpisode()}>
-            <Text style={{ color: '#ffffff' }} >Delete Episode</Text>
-          </Button>
+              </SafeAreaView>
+            </View>
+            <Button block square style={{ marginVertical: 5 }}
+              title='Choose File'
+              onPress={this.chooseFile.bind(this)}>
+              <Text style={{ color: '#ffffff' }} >+ Image</Text>
+            </Button>
+            <Button block square danger
+              style={{ marginVertical: 5 }}
+              onPress={() => this.handleDeleteEpisode()}>
+              <Text style={{ color: '#ffffff' }} >Delete Episode</Text>
+            </Button>
 
-        </Content>
-      </Container>
-    );
+          </Content>
+        </Container>
+      );
+    }
+    else { return (<Spinner />) }
   }
 }
 

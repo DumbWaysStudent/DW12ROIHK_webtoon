@@ -29,10 +29,21 @@ export const handleDeleteMyImages = (param) => ({
     type: types.DELETE_MY_IMAGES,
     payload: axios({
         method: 'DELETE',
-        url: `https://positive-toon-rest-api.herokuapp.com/api/v1/user/${param.user}
-        /webtoon/${param.webtoon}/episode/${param.episode}/image/${param.image}`,
+        url: `https://positive-toon-rest-api.herokuapp.com/api/v1/user/${param.user}/webtoon/${param.webtoon}/episode/${param.episode}/image/${param.image}`,
         headers: {
             Authorization: `bearer ${param.token}`
         }
+    })
+});
+
+export const handleUpdateMyImages = (param) => ({
+    type: types.UPDATE_MY_IMAGES,
+    payload: axios({
+        method: 'PATCH',
+        url: `https://positive-toon-rest-api.herokuapp.com/api/v1/user/${param.user}/webtoon/${param.webtoon}/episode/${param.episode}/image/${param.image}`,
+        headers: {
+            Authorization: `bearer ${param.token}`
+        },
+        data: param.data
     })
 });

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import {
   Container, Content, Body, Item, Button, Input, Icon, List,
-  Card, CardItem, Thumbnail, ListItem, Left, Header
+  Card, CardItem, Thumbnail, ListItem, Left, Header, Spinner
 } from 'native-base'
 import Slideshow from 'react-native-image-slider-show';
 
@@ -17,7 +17,7 @@ class ForYou extends React.Component {
       search: '',
       slidePos: 1,
       slideInterval: null,
-      banners: [{
+      data: [{
         title: 'Webtoon 1',
         genre: 'Barton waited twenty always repair in within we do.',
         image: 'https://via.placeholder.com/1080',
@@ -43,52 +43,46 @@ class ForYou extends React.Component {
     this.setState({
       slideInterval: setInterval(() => {
         this.setState({
-          slidePos: this.state.slidePos === this.state.banners.length ? 0 : this.state.slidePos + 1
+          slidePos: this.state.slidePos === this.state.data.length ? 0 : this.state.slidePos + 1
         });
       }, 2000)
     });
+    this.getData()
+  }
 
+  async getData() {
+    await this.props.handleGetWebtoons()
+    await this.setState({ data: this.props.webtoonsLocal.webtoons.data })
 
   }
   componentDidMount() {
-    this.props.handleGetWebtoons()
-
-    if (this.props.webtoonsLocal.webtoons.isSuccess) {
-      this.setState({ banners: this.props.webtoonsLocal.webtoons.data })
-    }
-
     // let image = []
     // for(let i=0; i < 2; i++){
-    //   image[i]= this.state.banners[i].image
+    //   image[i]= this.state.data[i].image
     // }
     // this.setState({imageBanners: image})
 
-    let newData = this.state.banners;
+    let newData = this.state.data;
     //newData[idx].isFav = !newData[idx].isFav;
     // function update favorite list
-    newData = this.state.banners.filter((item) =>
+    newData = this.state.data.filter((item) =>
       item.isFav == true
     );
     this.setState({ favorite: newData });
     this.props.navigation.setParams({ favorite: this.state.favorite })
 
   }
-  async componentWillReceiveProps(nextProps) {
-    if (nextProps.webtoonsLocal.webtoons.data !== this.props.webtoonsLocal.webtoons.data) {
-      //await this.props.handleGetWebtoons()
-      await this.setState({ data: this.props.webtoonsLocal.webtoons.data })
-    }
-  }
+
 
   componentWillUnmount() {
     clearInterval(this.state.slideInterval);
   }
   handleDetail(item) {
-    this.props.navigation.navigate('Detail', {webtoon: item})
+    this.props.navigation.navigate('Detail', { webtoon: item })
   }
 
   onHandleFavoriteBtn(idx) {
-    let newData = this.state.banners;
+    let newData = this.state.data;
     newData[idx].isFav = !newData[idx].isFav;
     if (newData[idx].favBtnColor == '#ff9c9c') {
       newData[idx].favBtnColor = '#ff3333'
@@ -96,7 +90,7 @@ class ForYou extends React.Component {
       newData[idx].favBtnColor = '#ff9c9c'
     }
     // function update favorite list
-    newData = this.state.banners.filter((item) =>
+    newData = this.state.data.filter((item) =>
       item.isFav == true
     );
     this.setState({ favorite: newData });
@@ -104,84 +98,95 @@ class ForYou extends React.Component {
 
 
   render() {
-    return (
-      <Container style={styles.container}>
-        <Content>
-          <Header searchBar style={styles.Header}>
-            <Item regular>
-              <Input
-                value={this.state.search}
-                onChangeText={(text) => this.setState({ search: text })}
+    if (this.props.webtoonsLocal.isLoading) {
+      return (<Spinner />)
+    }
+    else if (this.props.webtoonsLocal.isSuccess) {
+      // alert('here')
+      if (this.props.webtoonsLocal.needRefresh) {
+        this.getData()
+      }
+
+      return (
+        <Container style={styles.container}>
+          <Content>
+            <Header searchBar style={styles.Header}>
+              <Item regular>
+                <Input
+                  value={this.state.search}
+                  onChangeText={(text) => this.setState({ search: text })}
+                />
+                <Icon name='search' />
+              </Item>
+
+            </Header>
+            <Header span
+              style={styles.headerSlide}>
+              <Slideshow height={200}
+                dataSource={this.state.data}
+                position={this.state.slidePos}
+                onPositionChanged={position => this.setState({ position })}
               />
-              <Icon name='search' />
-            </Item>
+            </Header>
 
-          </Header>
-          <Header span
-            style={styles.headerSlide}>
-            <Slideshow height={200}
-              dataSource={this.state.banners}
-              position={this.state.slidePos}
-              onPositionChanged={position => this.setState({ position })}
-            />
-          </Header>
+            <List>
+              <View>
+                <Card bordered style={styles.formFav}>
 
-          <List>
-            <View>
-              <Card bordered style={styles.formFav}>
+                  <ListItem itemDivider style={styles.ListDiv}>
+                    <Text style={styles.title}>Favorite</Text>
+                  </ListItem>
 
+
+                  <List dataArray={this.state.favorite} horizontal={true}
+                    renderRow={(item) =>
+                      <CardItem thumbnail bordered>
+                        <Body>
+                          <Button transparent onPress={() => alert('belum')}>
+                            <Thumbnail square source={{ uri: item.url }} />
+                          </Button>
+                          <Text>{item.title}</Text>
+                        </Body>
+                      </CardItem>}>
+                  </List>
+                </Card>
+
+              </View>
+              <Card>
                 <ListItem itemDivider style={styles.ListDiv}>
-                  <Text style={styles.title}>Favorite</Text>
+                  <Text style={styles.title}>All</Text>
                 </ListItem>
 
+                <List style={styles.formAll}
 
-                <List dataArray={this.state.favorite} horizontal={true}
+                  dataArray={this.props.webtoonsLocal.webtoons.data} horizontal={false}
                   renderRow={(item) =>
-                    <CardItem thumbnail bordered>
-                      <Body>
-                        <Button transparent onPress={() => alert('belum')}>
-                          <Thumbnail square source={{ uri: item.url }} />
+
+                    <CardItem thumbnail>
+                      <Left>
+                        <Button transparent onPress={() => this.handleDetail(item)}>
+                          <Thumbnail square source={{ uri: item.image }} />
                         </Button>
-                        <Text>{item.title}</Text>
-                      </Body>
-                    </CardItem>}>
+                        <Body>
+                          <Text >{item.title}</Text>
+                          <Button block small
+                            style={{ backgroundColor: item.favBtnColor }}
+                            onPress={() => this.onHandleFavoriteBtn(item.id)}>
+                            <Text style={{ color: '#ffffff' }}> + Favorite </Text>
+                          </Button>
+                        </Body>
+                      </Left>
+                    </CardItem>
+                  }>
                 </List>
               </Card>
+            </List>
 
-            </View>
-            <Card>
-              <ListItem itemDivider style={styles.ListDiv}>
-                <Text style={styles.title}>All</Text>
-              </ListItem>
-
-              <List style={styles.formAll}
-
-                dataArray={this.props.webtoonsLocal.webtoons.data} horizontal={false}
-                renderRow={(item) =>
-
-                  <CardItem thumbnail>
-                    <Left>
-                      <Button transparent onPress={() => this.handleDetail(item)}>
-                        <Thumbnail square source={{ uri: item.image }} />
-                      </Button>
-                      <Body>
-                        <Text >{item.title}</Text>
-                        <Button block small
-                          style={{ backgroundColor: item.favBtnColor }}
-                          onPress={() => this.onHandleFavoriteBtn(item.id)}>
-                          <Text style={{ color: '#ffffff' }}> + Favorite </Text>
-                        </Button>
-                      </Body>
-                    </Left>
-                  </CardItem>
-                }>
-              </List>
-            </Card>
-          </List>
-
-        </Content>
-      </Container>
-    );
+          </Content>
+        </Container>
+      );
+    }
+    else { return (<Spinner />) }
   }
 }
 
