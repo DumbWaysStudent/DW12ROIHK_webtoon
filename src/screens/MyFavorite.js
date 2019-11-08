@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { Container, Content, Body, Item, Button, Input, Icon, List, Thumbnail, ListItem, Card } from 'native-base'
+import { Container, Content, Body, Item, Button, Input, Icon, List, Thumbnail, ListItem, Card, Header } from 'native-base'
 
 export default class MyFavorite extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       //test : this.props.navigation.favorite,
-      banners : [{
+      banners: [{
         id: 0,
         title: 'The Secret of Angel',
         sumFav: 100,
@@ -39,68 +39,69 @@ export default class MyFavorite extends React.Component {
         url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015800.jpg'
       }],
       arrayholder: [],
-      data:[],
+      data: [],
     };
   }
 
   handleDetail() {
     this.props.navigation.navigate('Detail')
   }
-  
-  componentDidMount(){
+
+  componentDidMount() {
     //const { favorite } = this.props.navigation.state.params;
     //this.setState({banners: favorite})
-    this.setState({arrayholder: this.state.banners})
+    this.setState({ arrayholder: this.state.banners })
   }
 
-  searchFilterFunction = text => {    
-    const newData = this.state.arrayholder.filter((item) => {      
-      const itemData = item.title.toUpperCase();   
-       const textData = text.toUpperCase();
-        
-       return itemData.indexOf(textData) > -1;    
-       
+  searchFilterFunction = text => {
+    const newData = this.state.arrayholder.filter((item) => {
+      const itemData = item.title.toUpperCase();
+      const textData = text.toUpperCase();
+
+      return itemData.indexOf(textData) > -1;
+
     });
-    
-    this.setState({ banners: newData });  
+
+    this.setState({ banners: newData });
   };
-  
+
   render() {
     return (
       <Container style={styles.container}>
-        <Content>
-          
-          <View style={styles.formSearch}>
-          <Item regular>
-            <Input
-              placeholder="Type Here..."        
-              lightTheme                
-              onChangeText={text => this.searchFilterFunction(text)}
+        <Header searchBar style={styles.Header}>
+            <View style={styles.formSearch}>
+              <Item regular>
+                <Input
+                  placeholder="Type Here..."
+                  lightTheme
+                  onChangeText={text => this.searchFilterFunction(text)}
                 />
-            <Icon name='search'
-            onPress= {() => alert('search')}/>
-          </Item>
-          </View>
+                <Icon name='search'
+                  onPress={() => alert('search')} />
+              </Item>
+            </View>
+          </Header>
+        <Content>
           <View style={styles.formFav}>
             <Text style={styles.title}>Favorite</Text>
-              <List dataArray={this.state.banners}
+            <List dataArray={this.state.banners}
               renderRow={(item) =>
-                <Card>
-              <ListItem thumbnail>
-                  <Button onPress = {() => this.handleDetail()}>
-                <Thumbnail square source={{uri: item.url}}/> 
-                </Button>
-                <Body>
-                  <Text>{item.title}</Text>
-              <Text note numberOfLines={1}>{item.sumFav} Favorite</Text>
-                </Body>
-              </ListItem>
-              </Card>
-            }>
-              </List>
-              </View>
+                <Card style={styles.Card}>
+                  <ListItem thumbnail>
+                    <Button onPress={() => this.handleDetail()}>
+                      <Thumbnail square source={{ uri: item.url }} />
+                    </Button>
+                    <Body>
+                      <Text>{item.title}</Text>
+                      <Text note numberOfLines={1}>{item.sumFav} Favorite</Text>
+                    </Body>
+                  </ListItem>
+                </Card>
+              }>
+            </List>
+          </View>
         </Content>
-        </Container>
+      </Container>
     );
   }
 }
@@ -108,20 +109,24 @@ export default class MyFavorite extends React.Component {
 const styles = StyleSheet.create({
   container: {
     width: Dimensions.get('window').width,
-    paddingHorizontal: 10
+    backgroundColor: '#f4f4f4'
   },
-  formSearch :{
-    marginVertical: 10
+  Header: {
+    backgroundColor: '#E3608A',
+  },
+  formSearch: {
+    marginVertical: 10,
+    width: Dimensions.get('window').width-20
   },
   formFav: {
     padding: 5
-  },  
+  },
   title: {
     padding: 5,
     fontSize: 20,
   },
-  Header:{
-    backgroundColor: '#ff6e6e',
-  },
-
+  Card: {
+    borderWidth: 5,
+    borderColor: 'black'
+  }
 })

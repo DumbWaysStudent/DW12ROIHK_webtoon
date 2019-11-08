@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions, SafeAreaView, FlatList, AsyncStorage } from 'react-native';
 import {
   Container, Content, Body, Item, Button, Input, Icon, Thumbnail, ListItem, Header,
-  Left, Title, Right
+  Left, Title, Right, Spinner
 } from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 
@@ -106,7 +106,7 @@ class CreateEpisode extends React.Component {
   }
 
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     // this.setState({EpisodeName: this.props.navigation.state.params.episode.result.title})
     this.userData()
   }
@@ -128,19 +128,22 @@ class CreateEpisode extends React.Component {
       episode: await this.state.episode.id
     }
     this.setState({ param: param })
-    //console.log(this.props.navigation.state.params.episode);
-    await this.props.handleGetMyImages(param)
+    this.getData()
+  }
+  async getData(){
+    await this.props.handleGetMyImages(this.state.param)
     await this.setState({ data: this.props.myImages.images.data })
   }
 
-  // async componentWillReceiveProps(nextProps) {
-  //   if (nextProps.myImages.images.data !== this.props.myImages.images.data) {
-  //     await this.props.handleGetMyImages(this.state.param)
-  //     await this.setState({ data: this.props.myImages.images.data })
-  //   }
-  // }
-
   render() {
+    if (this.props.myImages.isLoading) {
+      return (<Spinner />)
+    }
+    else if (this.props.myImages.isSuccess) {
+      // alert('here')
+      if (this.props.myImages.needRefresh) {
+        this.getData()
+      }
     return (
       <Container>
         <Header style={styles.Header}>
@@ -165,9 +168,9 @@ class CreateEpisode extends React.Component {
         <Content style={styles.container}>
           <View style={styles.formTitle}>
 
-            <Text style={styles.title}>Name</Text>
-            <Item rounded>
-              <Input
+            <Text style={styles.subTitle}>Name</Text>
+            <Item regular style={styles.box}>
+              <Input 
                 value={this.state.episode.title}
                 onChangeText={(text) =>
                   this.setState({
@@ -179,7 +182,7 @@ class CreateEpisode extends React.Component {
             </Item>
           </View>
           <View style={styles.formEp}>
-            <Text style={styles.title}>Add Images</Text>
+            <Text style={styles.subTitle}>Add Images</Text>
             <SafeAreaView style={styles.form}>
               <FlatList
                 data={this.state.data}
@@ -190,7 +193,7 @@ class CreateEpisode extends React.Component {
                     <Body>
                       <Text>{item.page}. {item.fileName}</Text>
                       <Button small block danger
-                        style={{ width: 80 }}
+                        style={styles.deleteImageButton}
                         onPress={() => this.handleRemoveBtn(item.page)}>
                         <Text style={styles.ButtonText}> delete </Text></Button>
                     </Body>
@@ -201,13 +204,16 @@ class CreateEpisode extends React.Component {
 
             </SafeAreaView>
           </View>
-          <Button block rounded onPress={this.chooseFile.bind(this)}>
+          <Button block rounded style={styles.addButton}
+          onPress={this.chooseFile.bind(this)}>
             <Text style={styles.ButtonText} >+ Images</Text>
           </Button>
 
         </Content>
       </Container>
     );
+  }
+  else { return (<Spinner />) }
   }
 }
 
@@ -223,16 +229,36 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   title: {
-    padding: 5,
-    width: 200,
     fontSize: 20,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10
+  },
+  subTitle: {
+    fontSize: 20,
+  },
+  box: {
+    borderWidth: .5,
+    borderColor: 'black'
   },
   ButtonText: {
     color: '#ffffff'
   },
   Header: {
-    backgroundColor: '#ff6e6e',
+    backgroundColor: '#E3608A',
   },
+  addButton: {
+    margin: 5,
+    backgroundColor: '#40bfc1',
+    borderWidth: .5,
+    borderColor: 'black'
+  },
+  deleteImageButton: {
+    width: 80,
+    backgroundColor: '#E4353A',
+    borderWidth: .5,
+    borderColor: 'black'
+  }
 
 })
 

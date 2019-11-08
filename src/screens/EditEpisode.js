@@ -55,7 +55,7 @@ class EditEpisode extends React.Component {
       image: idx
     }
     await this.props.handleDeleteMyImages(param)
-   // this.userData()
+    // this.userData()
   }
 
   chooseFile = () => {
@@ -99,7 +99,7 @@ class EditEpisode extends React.Component {
     });
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.userData()
   }
   async addData(newData) {
@@ -111,9 +111,9 @@ class EditEpisode extends React.Component {
       }
     }
     console.log('=====add====');
-    
+
     console.log(param);
-    
+
     await this.props.handleAddMyImages(param)
   }
 
@@ -127,13 +127,13 @@ class EditEpisode extends React.Component {
 
     await this.setState({ param: param })
     await this.getData()
-    
+
     console.log('=====get====');
-    
+
     console.log(param);
   }
 
-  async getData(){
+  async getData() {
     await this.props.handleGetMyImages(this.state.param)
     await this.setState({ data: this.props.myImages.images.data })
   }
@@ -182,8 +182,8 @@ class EditEpisode extends React.Component {
           <Content style={styles.container}>
             <View style={styles.formTitle}>
 
-              <Text style={styles.title}>Name</Text>
-              <Item rounded>
+              <Text style={styles.subTitle}>Name</Text>
+              <Item regular style={styles.box}>
                 <Input
                   value={this.state.episode.title}
                   onChangeText={(text) => this.setState({
@@ -195,7 +195,7 @@ class EditEpisode extends React.Component {
               </Item>
             </View>
             <View style={styles.formEp}>
-              <Text style={styles.title}>Add Images</Text>
+              <Text style={styles.subTitle}>Add Images</Text>
               <SafeAreaView style={styles.form}>
                 <FlatList
                   data={this.state.data}
@@ -206,7 +206,7 @@ class EditEpisode extends React.Component {
                       <Body>
                         <Text>{item.page}. {item.image}</Text>
                         <Button small block danger
-                          style={{ width: 80 }}
+                          style={styles.deleteImageButton}
                           onPress={() => this.handleRemoveBtn(item.id)}>
                           <Text style={styles.ButtonText}> delete </Text></Button>
                       </Body>
@@ -217,13 +217,13 @@ class EditEpisode extends React.Component {
 
               </SafeAreaView>
             </View>
-            <Button block square style={{ marginVertical: 5 }}
+            <Button block square style={styles.addButton}
               title='Choose File'
               onPress={this.chooseFile.bind(this)}>
               <Text style={{ color: '#ffffff' }} >+ Image</Text>
             </Button>
             <Button block square danger
-              style={{ marginVertical: 5 }}
+              style={styles.deleteButton}
               onPress={() => this.handleDeleteEpisode()}>
               <Text style={{ color: '#ffffff' }} >Delete Episode</Text>
             </Button>
@@ -247,18 +247,46 @@ const styles = StyleSheet.create({
   formEp: {
     padding: 5,
   },
-  title: {
-    padding: 5,
-    width: 200,
-    fontSize: 20,
-  },
   ButtonText: {
     color: '#ffffff'
   },
-  Header: {
-    backgroundColor: '#ff6e6e',
+  title: {
+    fontSize: 20,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10
   },
-
+  subTitle: {
+    fontSize: 20,
+  },
+  box: {
+    borderWidth: .5,
+    borderColor: 'black'
+  },
+  text: {
+    fontSize: 16,
+  },
+  Header: {
+    backgroundColor: '#E3608A',
+  },
+  addButton: {
+    margin: 5,
+    backgroundColor: '#40bfc1',
+    borderWidth: .5,
+    borderColor: 'black'
+  },
+  deleteButton: {
+    margin: 5,
+    backgroundColor: '#E4353A',
+    borderWidth: .5,
+    borderColor: 'black'
+  },
+  deleteImageButton: {
+    width: 80,
+    backgroundColor: '#E4353A',
+    borderWidth: .5,
+    borderColor: 'black'
+  }
 })
 
 

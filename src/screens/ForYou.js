@@ -39,7 +39,7 @@ class ForYou extends React.Component {
   }
 
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({
       slideInterval: setInterval(() => {
         this.setState({
@@ -55,7 +55,7 @@ class ForYou extends React.Component {
     await this.setState({ data: this.props.webtoonsLocal.webtoons.data })
 
   }
-  componentDidMount() {
+  UNSAFE_componentDidMount() {
     // let image = []
     // for(let i=0; i < 2; i++){
     //   image[i]= this.state.data[i].image
@@ -74,7 +74,7 @@ class ForYou extends React.Component {
   }
 
 
-  componentWillUnmount() {
+  UNSAFE_componentWillUnmount() {
     clearInterval(this.state.slideInterval);
   }
   handleDetail(item) {
@@ -118,26 +118,21 @@ class ForYou extends React.Component {
                 />
                 <Icon name='search' />
               </Item>
-
             </Header>
-            <Header span
+            <Card
               style={styles.headerSlide}>
               <Slideshow height={200}
                 dataSource={this.state.data}
                 position={this.state.slidePos}
                 onPositionChanged={position => this.setState({ position })}
               />
-            </Header>
+            </Card>
 
             <List>
-              <View>
                 <Card bordered style={styles.formFav}>
-
                   <ListItem itemDivider style={styles.ListDiv}>
                     <Text style={styles.title}>Favorite</Text>
                   </ListItem>
-
-
                   <List dataArray={this.state.favorite} horizontal={true}
                     renderRow={(item) =>
                       <CardItem thumbnail bordered>
@@ -151,18 +146,14 @@ class ForYou extends React.Component {
                   </List>
                 </Card>
 
-              </View>
-              <Card>
+              <Card style={styles.formAll}>
                 <ListItem itemDivider style={styles.ListDiv}>
                   <Text style={styles.title}>All</Text>
                 </ListItem>
-
-                <List style={styles.formAll}
-
+                <List 
                   dataArray={this.props.webtoonsLocal.webtoons.data} horizontal={false}
                   renderRow={(item) =>
-
-                    <CardItem thumbnail>
+                    <CardItem thumbnail style={{backgroundColor: 'transparent'}} >
                       <Left>
                         <Button transparent onPress={() => this.handleDetail(item)}>
                           <Thumbnail square source={{ uri: item.image }} />
@@ -170,7 +161,7 @@ class ForYou extends React.Component {
                         <Body>
                           <Text >{item.title}</Text>
                           <Button block small
-                            style={{ backgroundColor: item.favBtnColor }}
+                            style={{ backgroundColor: item.favBtnColor, width: 100 }}
                             onPress={() => this.onHandleFavoriteBtn(item.id)}>
                             <Text style={{ color: '#ffffff' }}> + Favorite </Text>
                           </Button>
@@ -195,41 +186,55 @@ class ForYou extends React.Component {
 const styles = StyleSheet.create({
   container: {
     width: Dimensions.get('window').width,
+    backgroundColor: '#f5f5f5'//'#F5E027'
     //height: 500
   },
   Header: {
-    backgroundColor: '#ff6e6e',
+    backgroundColor: '#E3608A',
   },
   headerSlide: {
-    height: 210,
-    width: Dimensions.get('window').width,
+    width: Dimensions.get('window').width-20,
     alignSelf: 'center',
-    backgroundColor: '#ff6e6e',
+    backgroundColor: '#E3608A',
+    borderWidth: 10,
+    borderColor: 'black'
   },
   formSearch: {
     marginVertical: 10
   },
   formFav: {
-    padding: 3,
-    backgroundColor: '#ff6e6e'
+    alignSelf:'center',
+    backgroundColor: '#f5f5f5',
+    width: Dimensions.get('window').width-20,
+    borderWidth: .2,
+    borderColor: 'black'
   },
   formAll: {
-    marginTop: 10,
-    width: 250,
-
+    alignSelf:'center',
+    width: Dimensions.get('window').width-20,
+    backgroundColor: '#f4f4f4',
+    borderWidth: .2,
+    borderColor: 'black'
   },
   title: {
     height: 22,
     fontSize: 20,
-    color: 'white'
+    color: 'white',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10
   },
   Slideshow: {
-    width: 250,
+    width: Dimensions.get('window').width-40,
+
   },
   favBtn: {
   },
   ListDiv: {
-    backgroundColor: '#ff6e6e',
+    backgroundColor: '#E3608A',
+    borderWidth: .2,
+    borderColor: 'black'
+    
   }
 })
 

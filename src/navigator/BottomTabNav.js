@@ -46,12 +46,12 @@ const BottomTabNav = createBottomTabNavigator(
         return <Icon name={iconName} size={25} color='white' />;
       },
     }),
-  
+  //'#E3608A' '#F5E027'
     tabBarOptions: {
-      activeBackgroundColor:'#ff6e6e',
-      //inactiveBackgroundColor:'#3419ff', 
+      activeBackgroundColor:'#F5E027',
+      inactiveBackgroundColor:'#E3608A', 
       activeTintColor: 'white',
-      inactiveTintColor: 'gray',
+      inactiveTintColor: 'white',
     },
   }
 );

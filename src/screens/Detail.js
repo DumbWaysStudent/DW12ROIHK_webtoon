@@ -22,7 +22,7 @@ class Detail extends Component {
   }
 
   componentDidMount() {
-    const webtoonId=this.props.navigation.state.params.webtoon.id
+    const webtoonId = this.props.navigation.state.params.webtoon.id
     this.props.handleGetEpisodes(webtoonId)
 
     if (this.props.episodesLocal.episodes.isSuccess) {
@@ -45,8 +45,8 @@ class Detail extends Component {
   }
 
   handleDetailEp(item) {
-    const webtoonId=this.props.navigation.state.params.webtoon.id
-    this.props.navigation.navigate('DetailEpisode', {episode: item, webtoon: webtoonId})
+    const webtoonId = this.props.navigation.state.params.webtoon.id
+    this.props.navigation.navigate('DetailEpisode', { episode: item, webtoon: webtoonId })
   }
 
   handleBack() {
@@ -80,8 +80,8 @@ class Detail extends Component {
             <FlatList
               data={this.props.episodesLocal.episodes.data}
               renderItem={({ item }) =>
-                <ListItem thumbnail>
-                  <Button transparent onPress={() => this.handleDetailEp(item)}>
+                <ListItem thumbnail onPress={() => this.handleDetailEp(item)}>
+                  <Button transparent >
                     <Thumbnail square source={{ uri: item.image }} /></Button>
                   <Body>
                     <Text>{item.title}</Text>
@@ -112,13 +112,16 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    width: 200
+    alignSelf: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10
   },
   Slideshow: {
     width: 250,
   },
   Header: {
-    backgroundColor: '#ff6e6e',
+    backgroundColor: '#E3608A',
   },
 })
 

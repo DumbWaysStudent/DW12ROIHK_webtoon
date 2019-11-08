@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions, SafeAreaView, AsyncStorage } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, SafeAreaView, AsyncStorage, ImageBackground } from 'react-native';
 import {
   Container, Header, Left, Body, Right,
-  Button, Icon, Input, Title, Content, Card, Thumbnail, List, ListItem
+  Button, Icon, Input, Title, Content, Card, Thumbnail, List, ListItem, Item
 } from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 
@@ -10,6 +10,7 @@ import ContainProfile from './../components/ContainProfile';
 
 import { connect } from 'react-redux'
 import * as actionUsers from './../redux/actions/actionUsers'
+const Backgound = require('./../images/background2.jpeg');
 
 
 class RootProfile extends Component {
@@ -70,7 +71,7 @@ class RootProfile extends Component {
   handleMyCreation() {
     this.props.navigation.navigate('MyCreation')
   }
-  async getData(){
+  async getData() {
     //const userId = await AsyncStorage.getItem('userId');
     // const params= {
     //   token: await AsyncStorage.getItem('token'),
@@ -78,7 +79,7 @@ class RootProfile extends Component {
     // } 
     // await this.props.handleGetUsers(params)
     const name = await AsyncStorage.getItem('userName')
-    this.setState({name: name})
+    this.setState({ name: name })
 
   }
   componentDidMount() {
@@ -97,12 +98,12 @@ class RootProfile extends Component {
               onPress={this.chooseFile.bind(this)} >
               <Thumbnail style={styles.ProfileImage}
                 source={{ uri: this.state.filePath.uri }} /></Button>
-            <Card style={styles.textInputBox}>
+            <Item regular style={styles.textInputBox}>
               <Input bordered style={styles.textInput}
                 value={this.state.name}
                 onChangeText={(text) => this.setState({ name: text })}
               />
-            </Card>
+            </Item>
           </View>
         </Content>
       )
@@ -144,8 +145,10 @@ class RootProfile extends Component {
             </Button>
           </Right>
         </Header>
-        {mode}
-
+        <ImageBackground source={Backgound}
+          style={styles.Backgound}>
+          {mode}
+        </ImageBackground>
       </Container>
     );
 
@@ -155,16 +158,31 @@ class RootProfile extends Component {
 const styles = StyleSheet.create({
   container: {
     width: Dimensions.get('window').width,
-    padding: 4
+    padding: 4,
+  },
+  Backgound:{
+    width: Dimensions.get('window').width, 
+    height: Dimensions.get('window').height, 
+    borderWidth: 2,
+    borderColor: 'black',
+    alignContent: 'center'
   },
   form: {
     padding: 5
   },
   title: {
     fontSize: 20,
+    color: 'white',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10
   },
   allText: {
     fontSize: 20,
+    color: 'white',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10
   },
   ProfileImage: {
     width: 150,
@@ -178,14 +196,16 @@ const styles = StyleSheet.create({
   textInputBox: {
     width: 200,
     height: 50,
+    backgroundColor: 'white',
+
   },
   textInput: {
     fontSize: 20,
     fontSize: 20,
-    alignSelf: 'center'
+    textAlign: 'center',
   },
   Header: {
-    backgroundColor: '#ff6e6e',
+    backgroundColor: '#E3608A',
   },
 
 })

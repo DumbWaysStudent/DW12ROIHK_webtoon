@@ -19,7 +19,7 @@ class DetailEpisode extends Component {
     }
   }
 
-  componentDidMount() {
+  UNSAFE_componentDidMount() {
     const webtoonId= this.props.navigation.state.params.webtoon
     const episode= this.props.navigation.state.params.episode.id
     this.props.handleGetImages(webtoonId,episode)
@@ -49,7 +49,7 @@ class DetailEpisode extends Component {
   render() {
     return (
       <Container style={styles.Container}>
-        <Header>
+        <Header style={styles.Header}>
           <Left>
             <Button transparent>
               <Icon name='arrow-back'
@@ -97,8 +97,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    width: 200
-  }
+    alignSelf: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10
+  },
+  Header: {
+    backgroundColor: '#E3608A',
+  },
 })
 
 

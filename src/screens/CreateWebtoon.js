@@ -49,7 +49,7 @@ class CreateWebtoon extends React.Component {
   }
 
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.userData()
 
   }
@@ -116,15 +116,15 @@ class CreateWebtoon extends React.Component {
         <Content style={styles.container}>
           <View style={styles.formTitle}>
 
-            <Text style={styles.title}>Title</Text>
-            <Item rounded>
+            <Text style={styles.subTitle}>Title</Text>
+            <Item regular style={styles.box}>
               <Input
                 value={this.state.title}
                 onChangeText={(text) => this.setState({ title: text })}
               />
             </Item>
-              <Text style={styles.title}>Genre</Text>
-              <Item rounded>
+              <Text style={styles.subTitle}>Genre</Text>
+              <Item regular style={styles.box}>
                 <Input
                   value={this.state.genre}
                   onChangeText={(text) => this.setState({ genre: text })}
@@ -132,7 +132,7 @@ class CreateWebtoon extends React.Component {
               </Item>
           </View>
           <View style={styles.formEp}>
-            <Text style={styles.title}>Episode</Text>
+            <Text style={styles.subTitle}>Episode</Text>
             <SafeAreaView style={styles.form}>
               <FlatList
                 data={this.state.data}
@@ -151,7 +151,8 @@ class CreateWebtoon extends React.Component {
 
             </SafeAreaView>
           </View>
-          <Button block rounded onPress={() => this.handleCreateEpisode()}>
+          <Button block style={styles.addButton} 
+          onPress={() => this.handleCreateEpisode()}>
             <Text style={{ color: '#ffffff' }} >+ Add Episode</Text>
           </Button>
 
@@ -171,17 +172,40 @@ const styles = StyleSheet.create({
   formTitle: {
     marginVertical: 10
   },
+  box: {
+    borderWidth: .5,
+    borderColor: 'black'
+  },
   formEp: {
     padding: 5,
   },
   title: {
-    padding: 5,
-    width: 200,
+    fontSize: 20,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10
+  },
+  subTitle: {
     fontSize: 20,
   },
-  Header: {
-    backgroundColor: '#ff6e6e',
+  text: {
+    fontSize: 16,
   },
+  Header: {
+    backgroundColor: '#E3608A',
+  },
+  addButton: {
+    margin: 5,
+    backgroundColor: '#40bfc1',
+    borderWidth: .5,
+    borderColor: 'black'
+  },
+  deleteButton: {
+    margin: 5,
+    backgroundColor: '#E4353A',
+    borderWidth: .5,
+    borderColor: 'black'
+  }
 })
 
 

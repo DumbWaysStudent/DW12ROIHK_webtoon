@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions, AsyncStorage } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, AsyncStorage, TouchableHighlight } from 'react-native';
 import {
   Container, Header, Left, Body,
-  Button, Icon, Title, Thumbnail, List, ListItem, Fab, Card, Right, Spinner
+  Button, Icon, Title, Thumbnail, List, ListItem, Fab, Card, Right, Spinner, CardItem
 } from 'native-base';
 
 import { connect } from 'react-redux'
@@ -39,7 +39,7 @@ class MyCreation extends Component {
     this.props.navigation.navigate('Profile')
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.userData()
 
 
@@ -59,15 +59,6 @@ class MyCreation extends Component {
     await this.props.handleGetMyWebtoons(this.state.param)
     await this.setState({ data: this.props.myWebtoons.webtoons.data })
   }
-
-
-  // async componentWillReceiveProps(nextProps) {
-  //   if (nextProps.myWebtoons.webtoons.data !== this.props.myWebtoons.webtoons.data) {
-  //     await this.props.handleGetMyWebtoons(this.state.param)
-  //   //  await alert('here')
-  //  //   await this.setState({ data: this.props.myWebtoons.webtoons.data })
-  //   }
-  // }
   render() {
     if (this.props.myWebtoons.isLoading) {
       return (<Spinner />)
@@ -95,22 +86,25 @@ class MyCreation extends Component {
             <List
               dataArray={this.state.data}
               renderRow={(item) =>
-                <ListItem thumbnail style={styles.formItem}>
-                  <Left>
-                    <Button onPress={() => this.handleEditWebtoon(item)}>
-                      <Thumbnail square source={{ uri: item.image }} />
-                    </Button>
-                    <Body>
-                      <Text >{item.title}</Text>
-                      <Text note numberOfLines={1}>{item.genre}</Text>
-                    </Body>
-                  </Left>
-
-                </ListItem>
+                <Card style={styles.Card}>
+                  <TouchableHighlight onPress={() => this.handleEditWebtoon(item)}>
+                    <CardItem >
+                      <Left>
+                        <Button>
+                          <Thumbnail square source={{ uri: item.image }} />
+                        </Button>
+                        <Body >
+                          <Text>{item.title}</Text>
+                          <Text note numberOfLines={1}>{item.genre}</Text>
+                        </Body>
+                      </Left>
+                    </CardItem>
+                  </TouchableHighlight>
+                </Card>
               }>
             </List>
             <Fab
-              style={{ backgroundColor: '#5067FF' }}
+              style={{ backgroundColor: '#40bfc1' }}
               position="bottomRight"
               onPress={() => this.handleCreateWebtoon()}>
               <Icon name="add" />
@@ -125,7 +119,8 @@ class MyCreation extends Component {
 const styles = StyleSheet.create({
   container: {
     width: Dimensions.get('window').width,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    backgroundColor: '#f5f5f5'
   },
   formItem: {
     padding: 10
@@ -137,13 +132,24 @@ const styles = StyleSheet.create({
   title: {
     padding: 5,
     fontSize: 20,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10
   },
-  Slideshow: {
-    width: 250,
+  text: {
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10
   },
   Header: {
-    backgroundColor: '#ff6e6e',
+    backgroundColor: '#E3608A',
   },
+  Card: {
+    alignSelf: 'center',
+    width: Dimensions.get('window').width - 20,
+    borderWidth: 10,
+    borderColor: 'black'
+  }
 })
 
 const mapStateToProps = state => {

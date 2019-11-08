@@ -29,13 +29,21 @@ class EditWebtoon extends React.Component {
     await this.props.navigation.navigate('MyCreation')
   }
 
-  handleMyCreation(title) {
+  async handleMyCreation() {
+    const params = {
+      ...this.state.param,
+      data: {
+        title: this.state.title,
+        genre: this.state.genre,
+        image: 'https://via.placeholder.com/1080'
+      }
+    }
+    await this.props.handleUpdateMyWebtoons(params)
     this.props.navigation.navigate('MyCreation')
   }
   async handleCreateEpisode() {
     const newData = { title: `ep ${this.state.data.length + 1}`, image: 'https://via.placeholder.com/1080' }
     await this.addData(newData)
-    await this.userData()
     await this.props.navigation.navigate('CreateEpisode', {
       episode: this.state.newData,
       webtoon: this.state.id
@@ -53,7 +61,7 @@ class EditWebtoon extends React.Component {
   }
 
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.userData()
 
   }
@@ -69,7 +77,7 @@ class EditWebtoon extends React.Component {
     await this.getData()
   }
 
-  async getData(){
+  async getData() {
     await this.props.handleGetMyEpisodes(this.state.param)
     await this.setState({ data: this.props.myEpisodes.episodes.data })
   }
@@ -100,7 +108,7 @@ class EditWebtoon extends React.Component {
           <Header style={styles.Header}>
             <Left>
               <Button transparent
-                onPress={() => this.handleMyCreation()} >
+                onPress={() => this.props.navigation.goBack(null)} >
                 <Icon name='arrow-back'
                 />
               </Button>
@@ -118,29 +126,29 @@ class EditWebtoon extends React.Component {
           </Header>
           <Content style={styles.container}>
             <View style={styles.formTitle}>
-              <Text style={styles.title}>Title</Text>
-              <Item rounded>
-                <Input
+              <Text style={styles.subTitle}>Title</Text>
+              <Item regular style={styles.box}>
+                <Input style={styles.text}
                   value={this.state.title}
                   onChangeText={(text) => this.setState({ title: text })}
                 />
               </Item>
-              <Text style={styles.title}>Genre</Text>
-              <Item rounded>
-                <Input
+              <Text style={styles.subTitle}>Genre</Text>
+              <Item regular style={styles.box}>
+                <Input style={styles.text}
                   value={this.state.genre}
                   onChangeText={(text) => this.setState({ genre: text })}
                 />
               </Item>
             </View>
             <View style={styles.formEp}>
-              <Text style={styles.title}>Episode</Text>
+              <Text style={styles.subTitle}>Episode</Text>
               <SafeAreaView style={styles.form}>
                 <FlatList
                   data={this.state.data}
                   renderItem={({ item }) =>
-                    <ListItem thumbnail>
-                      <Button transparent onPress={() => this.handleEditEpisode(item)}>
+                    <ListItem thumbnail onPress={() => this.handleEditEpisode(item)}>
+                      <Button transparent >
                         <Thumbnail square source={{ uri: item.image }} /></Button>
                       <Body>
                         <Text>{item.title}</Text>
@@ -153,12 +161,12 @@ class EditWebtoon extends React.Component {
 
               </SafeAreaView>
             </View>
-            <Button block square style={{ marginVertical: 5 }}
+            <Button block square style={styles.addButton}
               onPress={() => this.handleCreateEpisode()}>
               <Text style={{ color: '#ffffff' }} >+ Add Episode</Text>
             </Button>
             <Button block square danger
-              style={{ marginVertical: 5 }}
+              style={styles.deleteButton}
               onPress={() => this.deleteWebtoon()}>
               <Text style={{ color: '#ffffff' }} >Delete Webtoon</Text>
             </Button>
@@ -179,17 +187,40 @@ const styles = StyleSheet.create({
   formTitle: {
     marginVertical: 10
   },
+  box: {
+    borderWidth: .5,
+    borderColor: 'black'
+  },
   formEp: {
     padding: 5,
   },
   title: {
-    padding: 5,
-    width: 200,
+    fontSize: 20,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10
+  },
+  subTitle: {
     fontSize: 20,
   },
-  Header: {
-    backgroundColor: '#ff6e6e',
+  text: {
+    fontSize: 16,
   },
+  Header: {
+    backgroundColor: '#E3608A',
+  },
+  addButton: {
+    margin: 5,
+    backgroundColor: '#40bfc1',
+    borderWidth: .5,
+    borderColor: 'black'
+  },
+  deleteButton: {
+    margin: 5,
+    backgroundColor: '#E4353A',
+    borderWidth: .5,
+    borderColor: 'black'
+  }
 })
 
 
@@ -203,6 +234,8 @@ const mapDispatchToProps = dispatch => {
   return {
     handleGetMyEpisodes: (param) => dispatch(actionMyEpisodes.handleGetMyEpisodes(param)),
     handleAddMyEpisodes: (param) => dispatch(actionMyEpisodes.handleAddMyEpisodes(param)),
+
+    handleUpdateMyWebtoons: (param) => dispatch(actionMyEpisodes.handleUpdateMyWebtoons(param)),
     handleDeleteMyWebtoons: (param) => dispatch(actionMyWebtoons.handleDeleteMyWebtoons(param))
   }
 }
