@@ -1,45 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { Container, Content, Body, Item, Button, Input, Icon, List, Thumbnail, ListItem, Card, Header } from 'native-base'
+import { View, Text, StyleSheet, Dimensions, AsyncStorage } from 'react-native';
+import { Container, Content, Body, Item, 
+  Button, Input, Icon, List, Thumbnail, ListItem, Card, Header, Spinner } from 'native-base'
 
-export default class MyFavorite extends React.Component {
+
+import { connect } from 'react-redux'
+import * as actionFavorites from './../redux/actions/actionFavorites'
+
+
+class MyFavorite extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       //test : this.props.navigation.favorite,
-      banners: [{
-        id: 0,
-        title: 'The Secret of Angel',
-        sumFav: 100,
-        url: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-      }, {
-        id: 1,
-        title: 'Pasutri Gaje',
-        sumFav: 1000,
-        url: 'https://webtoons-static.pstatic.net/image/pc/home/og_id.jpg?dt=2019090201'
-      }, {
-        id: 2,
-        title: 'Young Mom',
-        sumFav: 104,
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015644.jpg'
-      }, {
-        id: 3,
-        title: 'Young Dad',
-        sumFav: 120,
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015718.jpg'
-      }, {
-        id: 4,
-        title: 'Old Mom',
-        sumFav: 400,
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015741.jpg'
-      }, {
-        id: 5,
-        title: 'Young Dad',
-        sumFav: 10,
-        url: 'https://s.kaskus.id/images/2017/02/27/2153697_20170227015800.jpg'
-      }],
       arrayholder: [],
       data: [],
+      param:[],
     };
   }
 
@@ -47,25 +23,62 @@ export default class MyFavorite extends React.Component {
     this.props.navigation.navigate('Detail')
   }
 
-  componentDidMount() {
-    //const { favorite } = this.props.navigation.state.params;
-    //this.setState({banners: favorite})
-    this.setState({ arrayholder: this.state.banners })
+  // UNSAFE_componentDidMount() {
+  //   //const { favorite } = this.props.navigation.state.params;
+  //   //this.setState({banners: favorite})
+  //   this.setState({ arrayholder: this.state.banners })
+  // }
+  UNSAFE_componentWillMount() {
+    this.getFavorite()
+  }
+  async getFavorite() {
+    console.log('now');
+    const param = {
+      token: await AsyncStorage.getItem('token'),
+      user: await AsyncStorage.getItem('userId')
+    }
+    await this.setState({param: param})
+    console.log('here');
+    
+    await this.getData()
+  }
+  async getData() {
+    await this.props.handleGetFavorites(this.state.param)
+    await this.setState({ data: this.props.favoritesLocal.favorites.data })
+  
+  }
+  async deleteFavorite(id) {
+    let param = {
+      token: this.state.param.token,
+      user: this.state.param.user,
+      webtoon: id
+    }
+    console.log('delete fav');
+    await this.props.handleDeleteFavorites(param)
+    console.log('done delete');
   }
 
-  searchFilterFunction = text => {
-    const newData = this.state.arrayholder.filter((item) => {
-      const itemData = item.title.toUpperCase();
-      const textData = text.toUpperCase();
+  // searchFilterFunction = text => {
+  //   const newData = this.state.arrayholder.filter((item) => {
+  //     const itemData = item.title.toUpperCase();
+  //     const textData = text.toUpperCase();
 
-      return itemData.indexOf(textData) > -1;
+  //     return itemData.indexOf(textData) > -1;
 
-    });
+  //   });
 
-    this.setState({ banners: newData });
-  };
+  //   this.setState({ banners: newData });
+  // };
 
   render() {
+    if (this.props.favoritesLocal.isLoading) {
+      return (<Spinner />)
+    }
+    else if (this.props.favoritesLocal.isSuccess) {
+      if (this.props.favoritesLocal.needRefresh) {
+        this.getData()
+      }
+    }
     return (
       <Container style={styles.container}>
         <Header searchBar style={styles.Header}>
@@ -84,17 +97,19 @@ export default class MyFavorite extends React.Component {
         <Content>
           <View style={styles.formFav}>
             <Text style={styles.title}>Favorite</Text>
-            <List dataArray={this.state.banners}
+            <List dataArray={this.state.data}
               renderRow={(item) =>
                 <Card style={styles.Card}>
                   <ListItem thumbnail>
                     <Button onPress={() => this.handleDetail()}>
-                      <Thumbnail square source={{ uri: item.url }} />
+                      <Thumbnail square source={{ uri: item.webtoon_id.image }} />
                     </Button>
                     <Body>
-                      <Text>{item.title}</Text>
-                      <Text note numberOfLines={1}>{item.sumFav} Favorite</Text>
+                      <Text>{item.webtoon_id.title}</Text>
+                      <Text note numberOfLines={1}>{item.webtoon_id.favorite_count} Favorite</Text>
                     </Body>
+                    <Icon name='star' style={{marginRight: 20,}}
+                    onPress={() => this.deleteFavorite(item.webtoon_id.id) }/>
                   </ListItem>
                 </Card>
               }>
@@ -130,3 +145,22 @@ const styles = StyleSheet.create({
     borderColor: 'black'
   }
 })
+
+
+const mapStateToProps = state => {
+  return {
+    favoritesLocal: state.favorites
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleGetFavorites: (param) => dispatch(actionFavorites.handleGetFavorites(param)),
+    handleDeleteFavorites: (param) => dispatch(actionFavorites.handleDeleteFavorites(param))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MyFavorite);

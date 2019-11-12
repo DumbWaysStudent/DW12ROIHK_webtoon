@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, AsyncStorage, Image } from 'react-native';
+const Backgound = require('./../images/loading.jpeg');
 
 export default class LoadingScreen extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ export default class LoadingScreen extends Component {
     }
   }
 
- async componentDidMount(){
+ async UNSAFE_componentDidMount(){
      await this.passLogin()
   }
 

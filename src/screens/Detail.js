@@ -15,7 +15,7 @@ class Detail extends Component {
     this.state = {
       cover: {
         title: this.props.navigation.state.params.webtoon.title,
-        image: 'https://webtoons-static.pstatic.net/image/pc/home/og_id.jpg?dt=2019090201'
+        image: this.props.navigation.state.params.webtoon.image,
       },
       data: [],
     }

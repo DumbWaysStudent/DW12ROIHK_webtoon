@@ -204,7 +204,7 @@ class EditEpisode extends React.Component {
                       <Button transparent >
                         <Thumbnail square source={{ uri: item.image }} /></Button>
                       <Body>
-                        <Text>{item.page}. {item.image}</Text>
+                        <Text>{item.page}</Text>
                         <Button small block danger
                           style={styles.deleteImageButton}
                           onPress={() => this.handleRemoveBtn(item.id)}>

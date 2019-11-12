@@ -32,6 +32,8 @@ class MyCreation extends Component {
   }
 
   handleEditWebtoon(item) {
+    console.log(item);
+    
     this.props.navigation.navigate('EditWebtoon', { webtoon: item })
   }
 

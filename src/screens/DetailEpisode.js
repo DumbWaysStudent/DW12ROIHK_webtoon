@@ -19,7 +19,7 @@ class DetailEpisode extends Component {
     }
   }
 
-  UNSAFE_componentDidMount() {
+  UNSAFE_componentWillMount() {
     const webtoonId= this.props.navigation.state.params.webtoon
     const episode= this.props.navigation.state.params.episode.id
     this.props.handleGetImages(webtoonId,episode)
@@ -87,10 +87,10 @@ class DetailEpisode extends Component {
 const styles = StyleSheet.create({
   container: {
     width: Dimensions.get('window').width,
-    padding: 4
   },
   imageForm: {
-    height: Dimensions.get('window').height
+    height: Dimensions.get('window').height,
+    width: Dimensions.get('window').width,
   },
   form: {
     padding: 5

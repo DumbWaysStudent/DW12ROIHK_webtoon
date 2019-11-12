@@ -1,7 +1,7 @@
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-import Loading from '../screens/LoadingScreen'
+
 import Login from './../screens/Login'
 import Register from './../screens/Register'
 import Detail from './../screens/Detail'
@@ -18,12 +18,6 @@ import Favorite from './../screens/MyFavorite';
 
 // without Bottom Tab Navigator
 const HeaderNav = createStackNavigator({
-  LoadingScreen: {
-    screen: Loading,
-    navigationOptions: ({ navigation }) => ({
-      header: null
-    }),
-  },
   Login: {
     screen: Login,
     navigationOptions: ({ navigation }) => ({

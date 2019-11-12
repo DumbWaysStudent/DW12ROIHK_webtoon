@@ -1,6 +1,9 @@
 import * as types from '../types'
 
 const initialState = {
+  isLoading: false,
+  isSuccess: false,
+  needRefresh: false,
   episodes: []
 };
 
