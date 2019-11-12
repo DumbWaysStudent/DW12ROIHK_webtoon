@@ -46,3 +46,15 @@ export const handleUpdateMyWebtoons = (param) => ({
     data: param.data
   })
 });
+
+export const handleAddPhotoMyWebtoons = (param) => ({
+  type: types.UPLOAD_PHOTO_MY_WEBTOONS,
+  payload: axios({
+    method: 'POST',
+    url: 'https://us-central1-positivetoon-rest-api.cloudfunctions.net/uploadFile',
+    headers: {
+      Authorization: `bearer ${param.token}`
+    },
+    data: param.data
+  })
+});

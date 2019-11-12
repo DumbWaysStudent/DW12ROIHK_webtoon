@@ -21,7 +21,7 @@ export default class LoadingScreen extends Component {
     }
   }
 
- async UNSAFE_componentDidMount(){
+ async UNSAFE_componentWillMount(){
      await this.passLogin()
   }
 
